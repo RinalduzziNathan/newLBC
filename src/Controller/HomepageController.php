@@ -16,13 +16,14 @@ class HomepageController extends AbstractController
     {
         $securityContext = $this->container->get('security.authorization_checker');
         if ($securityContext->isGranted('IS_AUTHENTICATED_ANONYMOUSLY ')) {
-            dd("connecetd");
+            dd("connected");
         }
         $repository = $em->getRepository(Product::class);
         $products = $repository->findAll();
         if(!$products) {
             throw $this->createNotFoundException('Sorry, there is no product');
         }
+
         return $this->render('index.html.twig', [
             "products" => $products
         ]);

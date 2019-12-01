@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "92f53e541094c6b8cb3e5a78691d6f9e",
+    "content-hash": "794331bcd97c82580282c23a38d3c517",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2890,16 +2890,16 @@
         },
         {
             "name": "symfony/intl",
-            "version": "v5.0.0",
+            "version": "v5.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/intl.git",
-                "reference": "1a700ae25f25f1f7b2201da020184bff5a8912c0"
+                "reference": "41f910d47883c6ab37087ca4a3332e21e1d682f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/intl/zipball/1a700ae25f25f1f7b2201da020184bff5a8912c0",
-                "reference": "1a700ae25f25f1f7b2201da020184bff5a8912c0",
+                "url": "https://api.github.com/repos/symfony/intl/zipball/41f910d47883c6ab37087ca4a3332e21e1d682f4",
+                "reference": "41f910d47883c6ab37087ca4a3332e21e1d682f4",
                 "shasum": ""
             },
             "require": {
@@ -2961,7 +2961,7 @@
                 "l10n",
                 "localization"
             ],
-            "time": "2019-11-18T17:27:11+00:00"
+            "time": "2019-11-26T23:25:11+00:00"
         },
         {
             "name": "symfony/mime",

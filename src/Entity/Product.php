@@ -155,36 +155,7 @@ class Product
         return $this;
     }
 
-    /**
-     * @return Collection|ImageProduct[]
-     */
-    public function getImageProducts(): Collection
-    {
-        return $this->imageProducts;
-    }
 
-    public function addImageProduct(ImageProduct $imageProduct): self
-    {
-        if (!$this->imageProducts->contains($imageProduct)) {
-            $this->imageProducts[] = $imageProduct;
-            $imageProduct->setProduct($this);
-        }
-
-        return $this;
-    }
-
-    public function removeImageProduct(ImageProduct $imageProduct): self
-    {
-        if ($this->imageProducts->contains($imageProduct)) {
-            $this->imageProducts->removeElement($imageProduct);
-            // set the owning side to null (unless already changed)
-            if ($imageProduct->getProduct() === $this) {
-                $imageProduct->setProduct(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection|ProductImage[]

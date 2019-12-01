@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use App\Entity\ProductImage;
 use App\Entity\UserLogin;
 use App\Form\CreateProductFormType;
 use App\Form\SearchProductFormType;
@@ -65,13 +66,18 @@ class ProductController extends AbstractController
      */
     public function CreateProduct(Request $request, EntityManagerInterface $em, Security $security)
     {
+        if( !$security->isGranted('IS_AUTHENTICATED_FULLY') ){
+            return $this->redirectToRoute('app_login');
+        }
+
         $product = new Product();
+        $image = new ProductImage();
         $form = $this->createForm(CreateProductFormType::class,$product);
         $form->handleRequest($request); // On récupère le formulaire envoyé dans la requête
         if ($form->isSubmitted() && $form->isValid()) { // on véfifie si le formulaire est envoyé et si il est valide
-
+            dd($form);
             $article = $form->getData(); // On récupère l'article associé
-            $article->setUserId($security->getUser());
+            $article->setUser($security->getUser());
             $article->setPublishdate(New \DateTime());
             /*
             $file = $article->getFileName();
@@ -79,15 +85,13 @@ class ProductController extends AbstractController
             $filename = md5(uniqid()).'.'.$file->guessExtension();
             $file->move($this->getParameter('upload_directory'),$filename);
             $article->setFileName($filename);*/
-            $article->setFileName("eztfgdzehn");
+
             $em->persist($article); // on le persiste
             $em->flush(); // on save
             return $this->redirectToRoute('index'); // Hop redirigé et on sort du controller
         }
-        if( !$security->isGranted('IS_AUTHENTICATED_FULLY') ){
-            return $this->redirectToRoute('app_login');
-        }
-        return $this->render('publishproduct.html.twig', ['form' => $form->createView()]); // on envoie ensuite le formulaire au template
+
+        return $this->render('product/publishproduct.html.twig', ['form' => $form->createView()]); // on envoie ensuite le formulaire au template
     }
     /**
      * @Route("/searchproduct", name="searchproduct")
@@ -96,7 +100,6 @@ class ProductController extends AbstractController
     {
         $form = $this->createForm(SearchProductFormType::class);
         $form->handleRequest($request); // On récupère le formulaire envoyé dans la requête
-        //dd($form);
         if ($form->isSubmitted() && $form->isValid()) { // on véfifie si le formulaire est envoyé et si il est valide
             $repository = $em->getRepository(Product::class);
             $article = $form->getData(); // On récupère l'article associé
@@ -105,7 +108,6 @@ class ProductController extends AbstractController
             if(!$names) {
                 throw $this->createNotFoundException('Sorry, there is no product with this name');
             }
-            dd($names);
             return $this->render('test.html.twig', ['form' => $form->createView(), 'name'=>$name]); // Hop redirigé et on sort du controller
         }
         return $this->render('test.html.twig', ['form' => $form->createView()]); // on envoie ensuite le formulaire au template

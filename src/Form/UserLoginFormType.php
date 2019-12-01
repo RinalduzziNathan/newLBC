@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\UserLogin;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -65,12 +66,9 @@ class UserLoginFormType extends AbstractType
                 'attr' =>['class'=> 'form-control w-100',"placeholder"=>"Leave a description about you", "cols"=>"30", "rows"=>"10"],
                 'label' => false,
                 'required' => false,])
-            ->add('imageUser',FileType::class,[
-                //'attr' =>['class'=> 'form-control'],
-                'help' => 'select a image',
-                'label' => false,
-                'mapped' => false,
-                'required' => true,]);
+            ->add('userImage',ImportImageUserFormType::class)
+            ->add('submit',SubmitType::class)
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver)

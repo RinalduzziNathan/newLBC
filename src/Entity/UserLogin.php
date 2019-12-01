@@ -310,14 +310,14 @@ class UserLogin implements UserInterface
         return $this;
     }
 
-    public function getImageUser(): ?ImageUser
+    public function getImageUser(): ?userImage
     {
-        return $this->imageUser;
+        return $this->userImage;
     }
 
-    public function setImageUser(ImageUser $imageUser): self
+    public function setImageUser(userImage $imageUser): self
     {
-        $this->imageUser = $imageUser;
+        $this->userImage = $imageUser;
 
         // set the owning side of the relation if necessary
         if ($imageUser->getUser() !== $this) {

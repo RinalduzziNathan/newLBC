@@ -8,7 +8,6 @@
                 <div class="col-12 col-lg-8">
                     <div class="checkout_details_area clearfix">
 
-                        <form  method="post" id="form-id">
                             {{form_start(form)}}
                             <div class="my-custom-class-for-errors">
                                 {{ form_errors(form) }}
@@ -31,7 +30,7 @@
                                     {{ form_widget(form.username) }}
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    {{ form_widget(form.imageUser) }}
+                                    {{ form_widget(form.userImage) }}
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     {{ form_widget(form.lastname) }}
@@ -67,9 +66,10 @@
                             </div>
                             {{form_rest(form)}}
                             {{ form_end(form) }}
-                        </form>
+
                     </div>
                 </div>
+                <!--
                 <div class="col-12 col-lg-4">
                     <div class="cart-summary">
                         <h5>Address</h5>
@@ -77,7 +77,7 @@
                             <button form="form-id" type="submit" class="btn amado-btn w-100">Register</button>
                         </div>
                     </div>
-                </div>
+                </div>-->
             </div>
         </div>
     </div>
