@@ -1,0 +1,67 @@
+
+
+    <div class="cart-table-area section-padding-100">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-lg-8">
+                    <div class="checkout_details_area mt-50 clearfix">
+
+                        <div class="cart-title">
+                            <h2>Se connecter</h2>
+                        </div>
+                        {% if error %}
+                            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                        {% endif %}
+
+                        {% if app.user %}
+                            <div class="mb-3">
+                                You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+                            </div>
+                        {% endif %}
+                        <form method="post">
+                            <div class="row">
+
+                                <label for="inputUsername" class="sr-only">Username</label>
+                                <div class="col-md-6 mb-3">
+                                    <input type="text" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" placeholder="Username" required autofocus>
+                                </div>
+                                    <label for="inputPassword" class="sr-only">Password</label>
+                                <div class="col-md-6 mb-3">
+                                    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                                </div>
+                                    <input type="hidden" name="_csrf_token"
+                                           value="{{ csrf_token('authenticate') }}"
+                                    >
+
+                                    {#
+                                        Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
+                                        See https://symfony.com/doc/current/security/remember_me.html
+                                        <div class="checkbox mb-3">
+                                            <label>
+                                                <input type="checkbox" name="_remember_me"> Remember me
+                                            </label>
+                                        </div>
+                                    #}
+
+                                    <button class="btn amado-btn w-100" type="submit">
+                                        Sign in
+                                    </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-4">
+                    <div class="cart-summary">
+                        <h5>Vous n'avez pas encore de compte?</h5>
+
+
+                        <div class="cart-btn mt-100">
+                            <p>Vous pouvez vous en créer un juste ici.</p>
+                            <i class="fa fa-angle-down d-flex justify-content-center "></i>
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
