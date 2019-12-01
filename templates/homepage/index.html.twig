@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+    {% block Content %}
+        <!-- Product Catagories Area Start -->
+
+        <div class="products-catagories-area clearfix">
+            <div class="amado-pro-catagory clearfix">
+                {% for product in products %}
+                    <!-- Single Catagory -->
+                    <div class="single-products-catagory clearfix">
+                        <a href="{{ path('productDetails', {productId: product.id }) }}">
+                            <img src="img/bg-img/1.jpg" alt="">
+                            <!-- Hover Content -->
+                            <div class="hover-content">
+                                <div class="line"></div>
+                                <p>Price {{ product.getPrice() }}€</p>
+                                <h4>{{ product.getName() }}</h4>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+
+            </div>
+        </div>
+
+    {% endblock %}

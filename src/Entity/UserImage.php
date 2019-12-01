@@ -5,9 +5,9 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\ImageProductRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\UserImageRepository")
  */
-class ImageProduct
+class UserImage
 {
     /**
      * @ORM\Id()
@@ -22,10 +22,10 @@ class ImageProduct
     private $filename;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="imageProducts")
+     * @ORM\OneToOne(targetEntity="App\Entity\UserLogin", inversedBy="userImage", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
-    private $product;
+    private $user;
 
     public function getId(): ?int
     {
@@ -44,14 +44,14 @@ class ImageProduct
         return $this;
     }
 
-    public function getProduct(): ?Product
+    public function getUser(): ?UserLogin
     {
-        return $this->product;
+        return $this->user;
     }
 
-    public function setProduct(?Product $product): self
+    public function setUser(UserLogin $user): self
     {
-        $this->product = $product;
+        $this->user = $user;
 
         return $this;
     }

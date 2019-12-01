@@ -5,7 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Form\FormTypeInterface;
+
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -87,9 +87,11 @@ class UserLogin implements UserInterface
     private $products;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\ImageUser", mappedBy="user", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\UserImage", mappedBy="user", cascade={"persist", "remove"})
      */
-    private $imageUser;
+    private $userImage;
+
+
 
     public function __construct()
     {
@@ -320,6 +322,23 @@ class UserLogin implements UserInterface
         // set the owning side of the relation if necessary
         if ($imageUser->getUser() !== $this) {
             $imageUser->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function getUserImage(): ?UserImage
+    {
+        return $this->userImage;
+    }
+
+    public function setUserImage(UserImage $userImage): self
+    {
+        $this->userImage = $userImage;
+
+        // set the owning side of the relation if necessary
+        if ($userImage->getUser() !== $this) {
+            $userImage->setUser($this);
         }
 
         return $this;

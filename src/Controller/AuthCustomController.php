@@ -42,24 +42,23 @@ class AuthCustomController extends AbstractController
     public function register(Request $request, UserPasswordEncoderInterface $encoder,EntityManagerInterface $em)
     {
         $user = new UserLogin();
+
         $form = $this->createForm(UserLoginFormType::class,$user);
         $form->handleRequest($request); // On récupère le formulaire envoyé dans la requête
         if ($form->isSubmitted() && $form->isValid()) { // on véfifie si le formulaire est envoyé et si il est valide
             $article = $form->getData(); // On récupère l'article associé
             $encoded = $encoder->encodePassword($article, $article->getPassword());
 
-       
-
             $article->setPassword($encoded);
-          //  $article->setCreationdate(New \Dat());
+            $article->setCreationdate(New \DateTime());
             $article->setRoles(['ROLE_USER']);
-         //   $article->setChangedate(New \DateTime());
+
 
             $em->persist($article); // on le persiste
             $em->flush(); // on save
             return $this->redirectToRoute('index');
         }
-        return $this->render('register.html.twig', ['form' => $form->createView()]); // Hop redirigé et on sort du controller
+        return $this->render('security/register.html.twig', ['form' => $form->createView()]); // Hop redirigé et on sort du controller
     }
 
     /**
@@ -69,12 +68,5 @@ class AuthCustomController extends AbstractController
     {
         throw new \Exception('This method can be blank - it will be intercepted by the logout key on your firewall');
         
-    }
-    /**
-     * @Route("/index", name="index")
-    */
-    public function GoIndex()
-    {
-        return $this->render('index.html.twig');
     }
 }

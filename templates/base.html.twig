@@ -1,12 +1,214 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+    <!-- Title  -->
+    <title>{% block title %}LeBonCoinCoin{% endblock %}</title>
+
+    <!-- Favicon  -->
+    {% block icon %}
+        <link rel="icon" href="{{ asset('img/core-img/logosanstexte.png') }}" >
+    {% endblock %}
+
+    <!-- Core Style CSS -->
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('css/core-style.css') }}" type="text/css">
+
+    {% endblock %}
+
+</head>
+
+<body>
+<!-- Search Wrapper -->
+{% block SeachBar %}
+    <div class="search-wrapper section-padding-100">
+        <div class="search-close">
+            <i class="fa fa-close" aria-hidden="true"></i>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="search-content">
+                        <form action="#" method="get">
+                            <input type="search" name="search" id="search" placeholder="Type your keyword...">
+                            <button type="submit"><img src="{{ asset('img/core-img/search.png') }}" alt="search"></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+<!-- ##### Bar  ##### -->
+{% block LeftBar %}
+
+    <div class="main-content-wrapper d-flex clearfix">
+
+        <!-- Mobile Nav (max width 767px)-->
+        <div class="mobile-nav">
+            <!-- Navbar Brand -->
+            <div class="amado-navbar-brand">
+                <a href="{{  path('index') }}"><img src="{{ asset('img/core-img/logoname.png') }}" alt="logo"></a>
+            </div>
+            <!-- Navbar Toggler -->
+            <div class="amado-navbar-toggler">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+
+        <!-- Header Area Start -->
+        <header class="header-area clearfix">
+            <!-- Close Icon -->
+            <div class="nav-close">
+                <i class="fa fa-close" aria-hidden="true"></i>
+            </div>
+            <!-- Logo -->
+            <div class="logo">
+                <a href="{{  path('index') }}"><img src="{{ asset('img/core-img/logoname.png') }}" alt="logo"></a>
+
+            </div>
+            <!-- Amado Nav -->
+            <nav class="amado-nav">
+                <ul>
+                    <li class="active"><a href="{{  path('index') }}">Home</a></li>
+                    <li><a href="{{  path('shop') }}">Shop</a></li>
+                    <li><a href="cart.html">Cart</a></li>
+                    <li><a href="checkout.html">Checkout</a></li>
+                </ul>
+            </nav>
+            <!-- Button Group -->
+            <div class="amado-btn-group mt-30 mb-100">
+                <a href="{{  path('publishproduct') }}" class="btn amado-btn mb-15">Déposer votre anonce</a>
+                <!-- Trigger the modal with a button -->
+                {% if not app.user %}
+                    <a type="button" class="btn amado-btn active mb-15" href="{{  path('app_login') }}">Login</a>
+                    <a type="text"  class="text-warning stretched-link register d-flex justify-content-end " href="{{  path('register') }}">register</a>
+
+                {% endif %}
+
+            </div>
+            <!-- Cart Menu -->
+            <div class="cart-fav-search mb-100">
+                {% if app.user %}
+                    <a href="{{ path('profile', {id: app.user.id }) }}" class="acount-nav"><i class="fa fa-user"> </i> {{ app.user.username }} </a>
+                {% endif %}
+                <a href="#" class="fav-nav"><i class="fa fa-star"></i> Favourite</a>
+                <a href="#" class="search-nav"><i class="fa fa-search"></i> Search</a>
+            </div>
+            <!-- Social Button -->
+            <div class="social-info d-flex justify-content-between">
+                <a href="https://www.pinterest.fr/"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
+                <a href="https://www.instagram.com/"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                <a href="https://fr-fr.facebook.com/"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                <a href="https://twitter.com/home"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+            </div>
+        </header>
+        <!-- Header Area End -->
+        {% block Content %}
+
+        {% endblock %}
+    </div>
+{% endblock %}
+
+
+<!-- ##### Newsletter ##### -->
+{% block Newsletter %}
+    <section class="newsletter-area section-padding-100-0">
+        <div class="container">
+            <div class="row align-items-center">
+                <!-- Newsletter Text -->
+                <div class="col-12 col-lg-6 col-xl-7">
+                    <div class="newsletter-text mb-100">
+                        <h2>Abonne toi à notre<span> NewLetter!!</span></h2>
+                        <p>Recevez toutes les informations de nos nouvelles fonctionnalité et nos mises a jour</p>
+                    </div>
+                </div>
+                <!-- Newsletter Form -->
+                <div class="col-12 col-lg-6 col-xl-5">
+                    <div class="newsletter-form mb-100">
+                        <form action="#" method="post">
+                            <input type="email" name="email" class="nl-email" placeholder="Votre E-mail">
+                            <input type="submit" value="S'abonner">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+
+<!-- ##### Footer Area ##### -->
+{% block Footer %}
+    <footer class="footer_area clearfix">
+        <div class="container">
+            <div class="row align-items-center">
+                <!-- Single Widget Area -->
+                <div class="col-10 col-lg-3">
+                    <div class="single_widget_area">
+                        <!-- Logo -->
+                        <div class="footer-logo mr-50">
+                            <a href="{{  path('index') }}"><img src="{{ asset('img/core-img/logosanstexte.png') }}" alt="Second logo"></a>
+                        </div>
+                        <!-- Copywrite Text -->
+                        <p class="copywrite">Copyright ©2019 All rights reserved.</br>
+                            Made with <i class="fa fa-heart-o" aria-hidden="true"></i> by Tomper Natmad and Louis
+                        </p>
+
+                    </div>
+                </div>
+                <!-- Single Widget Area -->
+                <div class="col-12 col-lg-8">
+                    <div class="single_widget_area">
+                        <!-- Footer Menu -->
+                        <div class="footer_menu">
+                            <nav class="navbar navbar-expand-lg justify-content-end">
+                                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#footerNavContent" aria-controls="footerNavContent" aria-expanded="false" aria-label="Toggle navigation"><i class="fa fa-bars"></i></button>
+                                <div class="collapse navbar-collapse" id="footerNavContent">
+                                    <ul class="navbar-nav ml-auto">
+                                        <li class="nav-item active">
+                                            <a class="nav-link" href="{{  path('index') }}">Home</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{{  path('shop') }}">Shop</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+{% endblock %}
+
+
+{% block javascripts %}
+    <!-- ##### jQuery ##### -->
+    <script type="text/javascript" src="{{ asset('js/jquery/jquery-2.2.4.min.js') }}"></script>
+    <!-- Popper js -->
+    <script type="text/javascript" src="{{ asset('js/popper.min.js') }}"></script>
+    <!-- Bootstrap js -->
+    <script type="text/javascript" src="{{ asset('js/bootstrap.min.js') }}"></script>
+    <!-- Plugins js -->
+    <script type="text/javascript" src="{{ asset('js/plugins.js') }}"></script>
+    <!-- Active js -->
+    <script type="text/javascript" src="{{ asset('js/active.js') }}"></script>
+    <!-- login js  -->
+    <script type="text/javascript" src="{{ asset('js/login.js') }}"></script>
+    <!-- isotope js -->
+    <script type="text/javascript" src={{ asset('js/categories.js') }}></script>
+    <script type="text/javascript" src="https://unpkg.com/isotope-layout@2/dist/isotope.pkgd.min.js"></script>
+
+{% endblock %}
+
+</body>
 </html>
