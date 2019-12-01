@@ -86,6 +86,11 @@ class UserLogin implements UserInterface
      */
     private $products;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\ImageUser", mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $imageUser;
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
@@ -298,6 +303,23 @@ class UserLogin implements UserInterface
             if ($product->getUser() === $this) {
                 $product->setUser(null);
             }
+        }
+
+        return $this;
+    }
+
+    public function getImageUser(): ?ImageUser
+    {
+        return $this->imageUser;
+    }
+
+    public function setImageUser(ImageUser $imageUser): self
+    {
+        $this->imageUser = $imageUser;
+
+        // set the owning side of the relation if necessary
+        if ($imageUser->getUser() !== $this) {
+            $imageUser->setUser($this);
         }
 
         return $this;
