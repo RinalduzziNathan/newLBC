@@ -55,7 +55,7 @@ class Product
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ProductImage", mappedBy="product", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\ProductImage", mappedBy="product", orphanRemoval=true,cascade={"persist"})
      */
     private $productImages;
 
@@ -165,6 +165,10 @@ class Product
         return $this->productImages;
     }
 
+    public function clear()
+    {
+        $this->productImages->clear();
+    }
     public function addProductImage(ProductImage $productImage): self
     {
         if (!$this->productImages->contains($productImage)) {

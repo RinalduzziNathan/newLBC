@@ -79,7 +79,7 @@ class AuthCustomController extends AbstractController
                 // instead of its contents
                 $image->setFilename($newFilename);
                 $image->setUser($user);
-                $user->setImageUser($image);
+                $article->setImageUser($image);
             }
 
             $em->persist($image);

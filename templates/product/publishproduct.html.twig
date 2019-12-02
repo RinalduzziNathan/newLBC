@@ -48,26 +48,25 @@
                                     {{ form_widget(form.category) }}
                                 </div>
 
-                                {{ form_label(form.productImages) }}
-                                {{ form_errors(form.productImages) }}
-
-                                <ul>
-                                    {% for emailField in form.productImages %}
-                                        <li>
-                                            {{ form_errors(emailField) }}
-                                            {{ form_widget(emailField.filename) }}
-                                        </li>
-                                    {% endfor %}
-                                </ul>
-
                                 <div class="col-md-12 mb-3">
                                     <h4> Images de l'annonce : *</h4>
                                 </div>
 
-                                <div class="col-md-12 mb-3">
-                                    {{ form_widget(form.productImages) }}
-                                </div>
+                                <ul id="email-fields-list"
+                                    data-prototype="{{ form_widget(form.productImages.vars.prototype)|e }}"
+                                    data-widget-tags="{{ '<li></li>'|e }}"
+                                    data-widget-counter="{{ form.productImages|length }}">
+                                    {% for image in form.productImages %}
+                                        <li>
+                                            {{ form_errors(image.filename) }}
+                                            {{ form_widget(image.filename) }}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
 
+                                <button type="button"
+                                        class="add-another-collection-widget"
+                                        data-list-selector="#email-fields-list">Add another image</button>
 
 
                                 <div class="col-md-12 mb-3">
@@ -94,4 +93,8 @@
     </div>
 
 
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src={{ asset('js/collection_image.js') }}></script>
 {% endblock %}

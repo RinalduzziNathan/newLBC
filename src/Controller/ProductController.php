@@ -7,7 +7,10 @@ use App\Entity\ProductImage;
 use App\Entity\UserLogin;
 use App\Form\CreateProductFormType;
 use App\Form\SearchProductFormType;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
@@ -74,23 +77,51 @@ class ProductController extends AbstractController
         }
 
         $product = new Product();
-        $image = new ProductImage();
+
         $form = $this->createForm(CreateProductFormType::class,$product);
         $form->handleRequest($request); // On récupère le formulaire envoyé dans la requête
         if ($form->isSubmitted() && $form->isValid()) { // on véfifie si le formulaire est envoyé et si il est valide
-            dd($form);
             $article = $form->getData(); // On récupère l'article associé
             $article->setUser($security->getUser());
             $article->setPublishdate(New \DateTime());
-            /*
-            $file = $article->getFileName();
-            //dd($article);
-            $filename = md5(uniqid()).'.'.$file->guessExtension();
-            $file->move($this->getParameter('upload_directory'),$filename);
-            $article->setFileName($filename);*/
+            $article->clear();
+            /** @var UploadedFile $File */
+            $Files = $form->get('productImages');
+
+            if ($Files) {
+                foreach ($Files as $requestFile){
+
+                    $image = new ProductImage();
+                    $File = $requestFile->get('filename')->getData();
+                    $originalFilename = pathinfo($File->getClientOriginalName(), PATHINFO_FILENAME);
+                    // this is needed to safely include the file name as part of the URL
+                    $safeFilename = preg_replace('/[^A-Za-z0-9]/', "", $originalFilename);
+                    $newFilename = $safeFilename . '-' . uniqid() . '.' . $File->guessExtension();
+
+                    // Move the file to the directory where brochures are stored
+                    try {
+                        $File->move(
+                            $this->getParameter('file_directory'),
+                            $newFilename
+                        );
+                    } catch (FileException $e) {
+                        // ... handle exception if something happens during file upload
+                    }
+
+                    // updates the 'brochureFilename' property to store the PDF file name
+                    // instead of its contents
+                    $image->setFilename($newFilename);
+                    $image->setProduct($product);
+                    $product->addProductImage($image);
+
+                    //$em->persist($image);
+
+                }
+            }
 
             $em->persist($article); // on le persiste
             $em->flush(); // on save
+
             return $this->redirectToRoute('index'); // Hop redirigé et on sort du controller
         }
 
