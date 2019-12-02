@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block Content %}
+
+<h2><U>User Information by ID:</U></h2>
+    <U>Nom:</U>  {{ user.getFirstname() }}<br>   
+<U>Prénom:</U> {{ user.getLastname() }}<br>   
+<U>Nom d'utilisateur:</U> {{ user.getUsername() }}<br>   
+<U>Code Postal:</U> {{ user.getPostalcode() }}<br>   
+<U>Adresse:</U> {{ user.getAddress() }}<br>   
+{% for product in user.getProducts() %}
+    <U>ProductName:</U> {{ product.getName() }}
+    <U>ProductPrice:</U> {{ product.getPrice() }}
+{% endfor %}
+{% endblock %}

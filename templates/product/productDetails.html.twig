@@ -1,0 +1,169 @@
+{% extends 'base.html.twig' %}
+
+    {% block Content %}
+<!-- Product Details Area Start -->
+    <div class="single-product-area section-padding-100 clearfix">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-12">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mt-50">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item"><a href="#">Furniture</a></li>
+                            <li class="breadcrumb-item"><a href="#">Chairs</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ product.getName() }}</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12 col-lg-7">
+                    <div class="single_product_thumb">
+                        <div id="product_details_slider" class="carousel slide" data-ride="carousel">
+                            <ol class="carousel-indicators">
+                                <li class="active" data-target="#product_details_slider" data-slide-to="0" style="background-image: url({{ asset('img/product-img/pro-big-1.jpg') }});">
+                                </li>
+                                <li data-target="#product_details_slider" data-slide-to="1" style="background-image: url({{ asset('img/product-img/pro-big-2.jpg') }});">
+                                </li>
+                                <li data-target="#product_details_slider" data-slide-to="2" style="background-image: url({{ asset('img/product-img/pro-big-3.jpg') }});">
+                                </li>
+                                <li data-target="#product_details_slider" data-slide-to="3" style="background-image: url({{ asset('img/product-img/pro-big-4.jpg') }});">
+                                </li>
+                            </ol>
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <a class="gallery_img" href="{{ asset('img/product-img/pro-big-1.jpg') }}">
+                                        <img class="d-block w-100" src="{{ asset('img/product-img/pro-big-1.jpg') }}" alt="First slide">
+                                    </a>
+                                </div>
+                                <div class="carousel-item">
+                                    <a class="gallery_img" href="{{ asset('img/product-img/pro-big-2.jpg') }}">
+                                        <img class="d-block w-100" src="{{ asset('img/product-img/pro-big-2.jpg') }}" alt="Second slide">
+                                    </a>
+                                </div>
+                                <div class="carousel-item">
+                                    <a class="gallery_img" href="{{ asset('img/product-img/pro-big-3.jpg') }}">
+                                        <img class="d-block w-100" src="{{ asset('img/product-img/pro-big-3.jpg') }}" alt="Third slide">
+                                    </a>
+                                </div>
+                                <div class="carousel-item">
+                                    <a class="gallery_img" href="{{ asset('img/product-img/pro-big-4.jpg') }}">
+                                        <img class="d-block w-100" src="{{ asset('img/product-img/pro-big-4.jpg') }}" alt="Fourth slide">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-5">
+                    <div class="single_product_desc">
+                        <!-- Product Meta Data -->
+                        <div class="product-meta-data">
+                            <div class="line"></div>
+                            <p class="product-price">{{ product.getPrice() }} €</p>
+                            <h2>{{ product.getName() }}</h2>
+                            <!-- Ratings & Review -->
+                            <div class="ratings-review mb-15 d-flex align-items-center justify-content-between">
+                                <div class="ratings">
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                </div>
+                                <div class="review">
+                                    <a href="{{ path('profile', {id: user.id }) }}">Par {{ user.getUsername() }}</a>
+                                </div>
+                            </div>
+                            <!-- Avaiable -->
+                            <p class="avaibility"><i class="fa fa-circle"></i>{{ product.getState() }}</p>
+                        </div>
+
+                        <div class="short_overview my-5">
+                            <p> {{ product.getDescription() }} </p>
+                        </div>
+
+                        <!-- Add to Cart Form -->
+                        <form class="cart clearfix" method="post">
+                            <div class="cart-btn d-flex mb-50">
+                                <p>Qty</p>
+                                <div class="quantity">
+                                    <span class="qty-minus" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty ) &amp;&amp; qty &gt; 1 ) effect.value--;return false;"><i class="fa fa-caret-down" aria-hidden="true"></i></span>
+                                    <input type="number" class="qty-text" id="qty" step="1" min="1" max="300" name="quantity" value="1">
+                                    <span class="qty-plus" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty )) effect.value++;return false;"><i class="fa fa-caret-up" aria-hidden="true"></i></span>
+                                </div>
+                            </div>
+                            <button type="submit" name="addtocart" value="5" class="btn amado-btn"><i class="fa fa-phone"></i> Voir le numéro</button>
+                            {{ user.getFirstName() }}
+                        </form>
+                    </div>
+                    <head>
+                        <meta charset='utf-8' />
+                        <title>Add a geocoder</title>
+                        <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+                        <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.js'></script>
+                        <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.css' rel='stylesheet' />
+                        <style>
+                            #map { position:absolute; top:500px; bottom:0; width:500px; margin:0; padding:0;}
+                        </style>
+                    </head>
+                    <body>
+
+                    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.min.js'></script>
+                    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.css' type='text/css' />
+                    <!-- Promise polyfill script required to use Mapbox GL Geocoder in IE 11 -->
+                    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
+                    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
+                    <script src='https://unpkg.com/es6-promise@4.2.4/dist/es6-promise.auto.min.js'></script>
+                    <script src="https://unpkg.com/@mapbox/mapbox-sdk/umd/mapbox-sdk.min.js"></script>
+
+                    <div id='map'></div>
+                    <script>
+                        mapboxgl.accessToken = 'pk.eyJ1Ijoia3Jha25pc3RpYyIsImEiOiJjazF4eTY2NmYwZzZ2M21xZ2NqNW81aWp0In0.fbP9E6XJtuUbsNvh5eHjkw';
+                        var map = mapboxSdk({ accessToken: mapboxgl.accessToken});
+                        map.geocoding.forwardGeocode({
+                            query: '{{ user.getCity() }}, "France"',
+                            autocomplete: false,
+                            limit: 1
+                        })
+                            .send()
+                            .then(function (response) {
+                                if (response && response.body && response.body.features && response.body.features.length) {
+                                    var feature = response.body.features[0];
+
+                                    var map = new mapboxgl.Map({
+                                        container: 'map',
+                                        style: 'mapbox://styles/mapbox/streets-v11',
+                                        center: feature.center,
+                                        zoom: 10
+                                    });
+                                    new mapboxgl.Marker()
+                                        .setLngLat(feature.center)
+                                        .addTo(map);
+                                }
+                                map.addControl(new MapboxGeocoder({
+                                    marker: {color: 'orange'},
+                                    accessToken: mapboxgl.accessToken,
+                                    mapboxgl: mapboxgl
+                                }));
+                                // Add geolocate control to the map.
+                                map.addControl(new mapboxgl.GeolocateControl({
+                                    positionOptions: {
+                                        enableHighAccuracy: true
+                                    },
+                                    trackUserLocation: true
+                                }));
+                                // Add zoom and rotation controls to the map.
+                                map.addControl(new mapboxgl.NavigationControl());
+                            });
+                    </script>
+
+                    </body>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+

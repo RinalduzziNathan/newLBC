@@ -28,7 +28,7 @@ class ProductController extends AbstractController
         if(!$products) {
             throw $this->createNotFoundException('Sorry, there is no product');
         }
-        return $this->render('categories.html.twig', [
+        return $this->render('product/categories.html.twig', [
             "products" => $products
         ]);
     }
@@ -40,12 +40,15 @@ class ProductController extends AbstractController
         $repository = $em->getRepository(Product::class);
         $product = $repository->find($productId);
         $repository = $em->getRepository(UserLogin::class);
-        $userid = $product->getUserId();
+        $userid = $product->getUser()->getId();
         $user = $repository->find($userid);
         if(!$product) {
             throw $this->createNotFoundException('Sorry, there is no product with this id');
         }
-        return $this->render('productDetails.html.twig', [
+        if(!$user) {
+            throw $this->createNotFoundException('Sorry, there is no user attach to this product');
+        }
+        return $this->render('product/productDetails.html.twig', [
             "product" => $product,
             "user" => $user
         ]);
@@ -104,6 +107,7 @@ class ProductController extends AbstractController
             $repository = $em->getRepository(Product::class);
             $article = $form->getData(); // On récupère l'article associé
             $name = $article["recherche"];
+            dd($name);
             $names = $repository->findByName($name);
             if(!$names) {
                 throw $this->createNotFoundException('Sorry, there is no product with this name');

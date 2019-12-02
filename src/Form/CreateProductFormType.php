@@ -31,12 +31,19 @@ class CreateProductFormType extends AbstractType
                 'attr'=> ['class'=> 'form-control',"placeholder"=>"Choisissez un prix réaliste."],
                 'label' => false,
                 'required' => true,])
-            ->add('category',TextType::class,[
-                'attr'=> ['class'=> 'form-control',"placeholder"=>"Veuillez donner un titre précis de l'annonce."],
-                'label' => false,
-                'required' => true,
-            ])
+            ->add('category',ChoiceType::class,[
+                'choices' => [
+                    'IMMOBILIER' => 'IMMOBILIER',
+                    'MEUBLE' => 'MEUBLE' ,
+                    'VEHICULE' => 'VEHICULE' ,
+                    'LOISIR' => 'LOISIR' ,
+                    'MULTIMEDIA' => 'MULTIMEDIA' ,
+                    'MATERIEL' => 'MATERIEL' ,
 
+                ],
+                'attr'=> ['class'=> 'form-control',"placeholder"=>"Veuillez l'état du produit."],
+                'label' => false,
+                'required' => true,])
             ->add('state',ChoiceType::class,[
                 'choices' => [
                     'neuf' => 'neuf',

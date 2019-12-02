@@ -104,12 +104,12 @@ class AuthCustomController extends AbstractController
      */
     public function UserInfo(EntityManagerInterface $em, $id)
     {
-        $repository = $em->getRepository(User::class);
+        $repository = $em->getRepository(UserLogin::class);
         $user = $repository->find($id);
         if(!$user) {
             throw $this->createNotFoundException('Sorry, there is no user with this id');
         }
-        return $this->render('profile.html.twig', [
+        return $this->render('security/profile.html.twig', [
             "user" => $user
         ]);
     }

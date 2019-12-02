@@ -24,7 +24,7 @@ class HomepageController extends AbstractController
             throw $this->createNotFoundException('Sorry, there is no product');
         }
 
-        return $this->render('index.html.twig', [
+        return $this->render('homepage/index.html.twig', [
             "products" => $products
         ]);
     }
