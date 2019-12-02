@@ -4,6 +4,8 @@ namespace App\Form;
 
 use App\Entity\Product;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -34,16 +36,23 @@ class CreateProductFormType extends AbstractType
                 'label' => false,
                 'required' => true,
             ])
-            ->add('state',TextType::class,[
-                'attr'=> ['class'=> 'form-control',"placeholder"=>"Veuillez donner un titre précis de l'annonce."],
-                'label' => false,
-                'required' => true,
-            ])
-            ->add('state',TextType::class,[
-                'attr'=> ['class'=> 'form-control',"placeholder"=>"Veuillez donner un titre précis de l'annonce."],
+
+            ->add('state',ChoiceType::class,[
+                'choices' => [
+                    'neuf' => 'neuf',
+                    'bon état' => 'bon état' ,
+                    'mauvais état' => 'mauvais état',
+                    "Mais c'etait sur" => "Mais c'etait sur",
+                ],
+                'attr'=> ['class'=> 'form-control',"placeholder"=>"Veuillez l'état du produit."],
                 'label' => false,
                 'required' => true,])
-            ->add('productImages',ImportImageProductFormType::class,[
+            ->add('productImages',CollectionType::class,[
+                'entry_type' =>ImportImageProductFormType::class,
+                'allow_add' => true,
+                'allow_delete' => true,
+                'prototype' => true,
+                'by_reference' => false,
 
             ])
             ->add('submit',SubmitType::class);

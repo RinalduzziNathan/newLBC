@@ -36,6 +36,41 @@
                                     {{ form_widget(form.description) }}
                                 </div>
                                 <div class="col-md-12 mb-3">
+                                    <h4> état du produit : *</h4>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    {{ form_widget(form.state) }}
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <h4> Catégories du produit : *</h4>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    {{ form_widget(form.category) }}
+                                </div>
+
+                                {{ form_label(form.productImages) }}
+                                {{ form_errors(form.productImages) }}
+
+                                <ul>
+                                    {% for emailField in form.productImages %}
+                                        <li>
+                                            {{ form_errors(emailField) }}
+                                            {{ form_widget(emailField.filename) }}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+
+                                <div class="col-md-12 mb-3">
+                                    <h4> Images de l'annonce : *</h4>
+                                </div>
+
+                                <div class="col-md-12 mb-3">
+                                    {{ form_widget(form.productImages) }}
+                                </div>
+
+
+
+                                <div class="col-md-12 mb-3">
                                     <p>Champs obligatoires *</p>
                                 </div>
 
