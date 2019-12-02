@@ -2,6 +2,8 @@
 {{form_start(form)}}
 {{ form_end(form) }}
 
-{% if name is defined %}
-<p>{{ name }}</p>
+{% if result is defined %}
+    {% for product in result %}
+        {{ product.getName() }}
+    {% endfor %}
 {% endif %}

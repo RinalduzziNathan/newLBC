@@ -18,22 +18,12 @@ class SearchProductFormType extends AbstractType
                 'label' => false,
                 'required' => true,])
         ;
-        /*
-        $builder
-            ->add('name')
-            ->add('category')
-            ->add('state')
-            ->add('description')
-            ->add('price')
-            ->add('publishdate')
-            ->add('user')
-        ;*/
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Product::class,
+            'data_class' => null,
         ]);
     }
 }

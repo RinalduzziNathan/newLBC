@@ -107,12 +107,30 @@ class ProductController extends AbstractController
             $repository = $em->getRepository(Product::class);
             $article = $form->getData(); // On récupère l'article associé
             $name = $article["recherche"];
-            dd($name);
             $names = $repository->findByName($name);
             if(!$names) {
                 throw $this->createNotFoundException('Sorry, there is no product with this name');
             }
-            return $this->render('test.html.twig', ['form' => $form->createView(), 'name'=>$name]); // Hop redirigé et on sort du controller
+            return $this->render('test.html.twig', ['form' => $form->createView(), 'result'=>$names]); // Hop redirigé et on sort du controller
+        }
+        return $this->render('test.html.twig', ['form' => $form->createView()]); // on envoie ensuite le formulaire au template
+    }
+    /**
+     * @Route("/searchproductbycategory/{category}", name="searchproductbycategory")
+     */
+    public function SearchProductByCategory(Request $request, EntityManagerInterface $em, $category)
+    {
+        $form = $this->createForm(SearchProductFormType::class);
+        $form->handleRequest($request); // On récupère le formulaire envoyé dans la requête
+        if ($form->isSubmitted() && $form->isValid()) { // on véfifie si le formulaire est envoyé et si il est valide
+            $repository = $em->getRepository(Product::class);
+            $article = $form->getData(); // On récupère l'article associé
+            $name = $article["recherche"];
+            $names = $repository->findByNameAndCategory($name, $category);
+            if(!$names) {
+                throw $this->createNotFoundException('Sorry, there is no product with this name');
+            }
+            return $this->render('test.html.twig', ['form' => $form->createView(), 'result'=>$names]); // Hop redirigé et on sort du controller
         }
         return $this->render('test.html.twig', ['form' => $form->createView()]); // on envoie ensuite le formulaire au template
     }
