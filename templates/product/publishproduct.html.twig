@@ -35,44 +35,56 @@
                                 <div class="col-md-12 mb-3">
                                     {{ form_widget(form.description) }}
                                 </div>
-                                <div class="col-md-12 mb-3">
+
+
+                                <div class="col-md-6 mb-3">
                                     <h4> état du produit : *</h4>
                                 </div>
-                                <div class="col-md-12 mb-3">
-                                    {{ form_widget(form.state) }}
-                                </div>
-                                <div class="col-md-12 mb-3">
+
+                                <div class="col-md-6 mb-3">
                                     <h4> Catégories du produit : *</h4>
                                 </div>
-                                <div class="col-md-12 mb-3">
+
+                                <div class="col-md-6 mb-3" >
+                                    {{ form_widget(form.state) }}
+                                </div>
+
+                                <div class="col-md-6 mb-3">
                                     {{ form_widget(form.category) }}
                                 </div>
+
 
                                 <div class="col-md-12 mb-3">
                                     <h4> Images de l'annonce : *</h4>
                                 </div>
+                                <div class="col-md-6 mb-3">
+                                    <ul id="image-fields-list"
+                                        data-prototype="{{ form_widget(form.productImages.vars.prototype)|e }}"
+                                        data-widget-tags="{{ '<li></li>'|e }}"
+                                        data-widget-counter="{{ form.productImages|length }}">
+                                        {% for image in form.productImages %}
+                                            <li>
+                                                {{ form_errors(image.filename) }}
+                                                {{ form_widget(image.filename) }}
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <button type="button"
+                                            class="add-another-collection-widget btn amado-btn w-40"
+                                            data-list-selector="#image-fields-list">Ajouter une image</button>
+                                </div>
+                                <div class="col-md-6 mb-3">
 
-                                <ul id="email-fields-list"
-                                    data-prototype="{{ form_widget(form.productImages.vars.prototype)|e }}"
-                                    data-widget-tags="{{ '<li></li>'|e }}"
-                                    data-widget-counter="{{ form.productImages|length }}">
-                                    {% for image in form.productImages %}
-                                        <li>
-                                            {{ form_errors(image.filename) }}
-                                            {{ form_widget(image.filename) }}
-                                        </li>
-                                    {% endfor %}
-                                </ul>
-
-                                <button type="button"
-                                        class="add-another-collection-widget"
-                                        data-list-selector="#email-fields-list">Add another image</button>
-
+                                </div>
 
                                 <div class="col-md-12 mb-3">
                                     <p>Champs obligatoires *</p>
                                 </div>
-
+                                <div class="col-md-12 mb-3 ">
+                                    {{ form_widget(form.submit) }}
+                                </div>
                             </div>
                             {{form_rest(form)}}
                             {{ form_end(form) }}

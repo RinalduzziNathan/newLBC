@@ -13,7 +13,6 @@ class ImportImageProductFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('filename',FileType::class, [
-                'help' => 'select a image',
                 'label' => false,
                 'required' => true,
             ]);

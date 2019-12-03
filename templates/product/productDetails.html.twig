@@ -1,6 +1,11 @@
 {% extends 'base.html.twig' %}
 
-    {% block Content %}
+{% block stylesheets %}
+    {{ parent() }}
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.css' rel='stylesheet' />
+{% endblock %}
+
+{% block Content %}
 <!-- Product Details Area Start -->
     <div class="single-product-area section-padding-100 clearfix">
         <div class="container-fluid">
@@ -23,36 +28,49 @@
                     <div class="single_product_thumb">
                         <div id="product_details_slider" class="carousel slide" data-ride="carousel">
                             <ol class="carousel-indicators">
-                                <li class="active" data-target="#product_details_slider" data-slide-to="0" style="background-image: url({{ asset('img/product-img/pro-big-1.jpg') }});">
+
+                                <li class="active" data-target="#product_details_slider" data-slide-to="0" style="background-image: url({{ asset('uploads/'~product.getProductImages()[0].filename) }});">
                                 </li>
-                                <li data-target="#product_details_slider" data-slide-to="1" style="background-image: url({{ asset('img/product-img/pro-big-2.jpg') }});">
+                                {% if product.getProductImages()[1].filename is defined %}
+                                <li data-target="#product_details_slider" data-slide-to="1" style="background-image: url({{ asset('uploads/'~product.getProductImages()[1].filename) }});">
                                 </li>
-                                <li data-target="#product_details_slider" data-slide-to="2" style="background-image: url({{ asset('img/product-img/pro-big-3.jpg') }});">
+                                {% endif %}
+                                {% if product.getProductImages()[2].filename is defined %}
+                                <li data-target="#product_details_slider" data-slide-to="2" style="background-image: url({{ asset('uploads/'~product.getProductImages()[2].filename) }});">
                                 </li>
-                                <li data-target="#product_details_slider" data-slide-to="3" style="background-image: url({{ asset('img/product-img/pro-big-4.jpg') }});">
+                                {% endif %}
+                                {% if product.getProductImages()[3].filename is defined %}
+                                <li data-target="#product_details_slider" data-slide-to="3" style="background-image: url({{ asset('uploads/'~product.getProductImages()[3].filename) }});">
                                 </li>
+                                {% endif %}
                             </ol>
                             <div class="carousel-inner">
                                 <div class="carousel-item active">
-                                    <a class="gallery_img" href="{{ asset('img/product-img/pro-big-1.jpg') }}">
-                                        <img class="d-block w-100" src="{{ asset('img/product-img/pro-big-1.jpg') }}" alt="First slide">
+                                    <a class="gallery_img" href="{{ asset('uploads/'~product.getProductImages()[0].filename) }}">
+                                        <img class="d-block w-100" src="{{ asset('uploads/'~product.getProductImages()[0].filename) }}" >
                                     </a>
                                 </div>
+                                {% if product.getProductImages()[1].filename is defined %}
+                                    <div class="carousel-item">
+                                        <a class="gallery_img" href="{{ asset('uploads/'~product.getProductImages()[1].filename) }}">
+                                            <img class="d-block w-100" src="{{ asset('uploads/'~product.getProductImages()[1].filename) }}" >
+                                        </a>
+                                    </div>
+                                {% endif %}
+                                {% if product.getProductImages()[2].filename is defined %}
                                 <div class="carousel-item">
-                                    <a class="gallery_img" href="{{ asset('img/product-img/pro-big-2.jpg') }}">
-                                        <img class="d-block w-100" src="{{ asset('img/product-img/pro-big-2.jpg') }}" alt="Second slide">
+                                    <a class="gallery_img" href="{{ asset('uploads/'~product.getProductImages()[2].filename) }}">
+                                        <img class="d-block w-100" src="{{ asset('uploads/'~product.getProductImages()[2].filename) }}" >
                                     </a>
                                 </div>
+                                {% endif %}
+                                {% if product.getProductImages()[3].filename is defined %}
                                 <div class="carousel-item">
-                                    <a class="gallery_img" href="{{ asset('img/product-img/pro-big-3.jpg') }}">
-                                        <img class="d-block w-100" src="{{ asset('img/product-img/pro-big-3.jpg') }}" alt="Third slide">
+                                    <a class="gallery_img" href="{{ asset('uploads/'~product.getProductImages()[3].filename) }}">
+                                        <img class="d-block w-100" src="{{ asset('uploads/'~product.getProductImages()[3].filename) }}">
                                     </a>
                                 </div>
-                                <div class="carousel-item">
-                                    <a class="gallery_img" href="{{ asset('img/product-img/pro-big-4.jpg') }}">
-                                        <img class="d-block w-100" src="{{ asset('img/product-img/pro-big-4.jpg') }}" alt="Fourth slide">
-                                    </a>
-                                </div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -99,71 +117,24 @@
                             {{ user.getFirstName() }}
                         </form>
                     </div>
-                    <head>
-                        <meta charset='utf-8' />
-                        <title>Add a geocoder</title>
-                        <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-                        <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.js'></script>
-                        <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.css' rel='stylesheet' />
-                        <style>
-                            #map { position:absolute; top:500px; bottom:0; width:500px; margin:0; padding:0;}
-                        </style>
-                    </head>
-                    <body>
-
-                    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.min.js'></script>
-                    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.css' type='text/css' />
-                    <!-- Promise polyfill script required to use Mapbox GL Geocoder in IE 11 -->
-                    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
-                    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
-                    <script src='https://unpkg.com/es6-promise@4.2.4/dist/es6-promise.auto.min.js'></script>
-                    <script src="https://unpkg.com/@mapbox/mapbox-sdk/umd/mapbox-sdk.min.js"></script>
-
-                    <div id='map'></div>
-                    <script>
-                        mapboxgl.accessToken = 'pk.eyJ1Ijoia3Jha25pc3RpYyIsImEiOiJjazF4eTY2NmYwZzZ2M21xZ2NqNW81aWp0In0.fbP9E6XJtuUbsNvh5eHjkw';
-                        var map = mapboxSdk({ accessToken: mapboxgl.accessToken});
-                        map.geocoding.forwardGeocode({
-                            query: '{{ user.getCity() }}, "France"',
-                            autocomplete: false,
-                            limit: 1
-                        })
-                            .send()
-                            .then(function (response) {
-                                if (response && response.body && response.body.features && response.body.features.length) {
-                                    var feature = response.body.features[0];
-
-                                    var map = new mapboxgl.Map({
-                                        container: 'map',
-                                        style: 'mapbox://styles/mapbox/streets-v11',
-                                        center: feature.center,
-                                        zoom: 10
-                                    });
-                                    new mapboxgl.Marker()
-                                        .setLngLat(feature.center)
-                                        .addTo(map);
-                                }
-                                map.addControl(new MapboxGeocoder({
-                                    marker: {color: 'orange'},
-                                    accessToken: mapboxgl.accessToken,
-                                    mapboxgl: mapboxgl
-                                }));
-                                // Add geolocate control to the map.
-                                map.addControl(new mapboxgl.GeolocateControl({
-                                    positionOptions: {
-                                        enableHighAccuracy: true
-                                    },
-                                    trackUserLocation: true
-                                }));
-                                // Add zoom and rotation controls to the map.
-                                map.addControl(new mapboxgl.NavigationControl());
-                            });
-                    </script>
-
-                    </body>
+                    <div id='map_product' data-lieu="{{ user.getCity() }}"></div>
                 </div>
             </div>
         </div>
     </div>
-    {% endblock %}
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.js'></script>
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.min.js'></script>
+    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.4.2/mapbox-gl-geocoder.css' type='text/css' />
+    <!-- Promise polyfill script required to use Mapbox GL Geocoder in IE 11 -->
+    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
+    <script src='https://unpkg.com/es6-promise@4.2.4/dist/es6-promise.auto.min.js'></script>
+    <script src="https://unpkg.com/@mapbox/mapbox-sdk/umd/mapbox-sdk.min.js"></script>
+    <script type="text/javascript" src={{ asset('js/displayInfoAndMap.js') }}></script>
+{% endblock %}
 

@@ -39,7 +39,6 @@ class CreateProductFormType extends AbstractType
                     'LOISIR' => 'LOISIR' ,
                     'MULTIMEDIA' => 'MULTIMEDIA' ,
                     'MATERIEL' => 'MATERIEL' ,
-
                 ],
                 'attr'=> ['class'=> 'form-control',"placeholder"=>"Veuillez l'état du produit."],
                 'label' => false,
@@ -50,6 +49,7 @@ class CreateProductFormType extends AbstractType
                     'bon état' => 'bon état' ,
                     'mauvais état' => 'mauvais état',
                     "Mais c'etait sur" => "Mais c'etait sur",
+                    'label' => false,
                 ],
                 'attr'=> ['class'=> 'form-control',"placeholder"=>"Veuillez l'état du produit."],
                 'label' => false,
@@ -60,9 +60,13 @@ class CreateProductFormType extends AbstractType
                 'allow_delete' => true,
                 'prototype' => true,
                 'by_reference' => false,
+                'label' => false,
 
             ])
-            ->add('submit',SubmitType::class);
+            ->add('submit',SubmitType::class,[
+                'attr'=> ['class'=> 'btn amado-btn w-100'],
+                    'label'=> "Publier"
+                    ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
