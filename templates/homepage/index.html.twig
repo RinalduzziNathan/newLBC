@@ -9,7 +9,7 @@
                         <!-- Single Catagory -->
                         <div class="single-products-catagory clearfix">
                             <a href="{{ path('productDetails', {productId: product.id }) }}">
-                                <img src="img/bg-img/1.jpg" alt="">
+                                <img src="{{ asset('uploads/'~product.getProductImages()[0].filename) }}" alt="">
                                 <!-- Hover Content -->
                                 <div class="hover-content">
                                     <div class="line"></div>

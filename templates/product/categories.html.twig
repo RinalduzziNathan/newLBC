@@ -154,10 +154,11 @@
                             <!-- Product Image -->
                             <a href="{{ path('productDetails', {productId: product.id }) }}">
                                 <div class="product-img">
-                                        <img src="img/product-img/product1.jpg" alt="">
-
+                                        <img src="{{ asset('uploads/'~product.getProductImages()[0].filename) }}" alt="">
+                                    {% if product.getProductImages()[1].filename is defined %}
                                     <!-- Hover Thumb -->
-                                    <img class="hover-img" src="img/product-img/product2.jpg" alt="">
+                                    <img class="hover-img" src="{{ asset('uploads/'~product.getProductImages()[1].filename) }}" alt="">
+                                    {% endif %}
                                 </div>
                             </a>
                             <!-- Product Description -->
