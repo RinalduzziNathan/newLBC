@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\UserImage;
 use App\Entity\UserLogin;
-use App\Form\UserLoginFormType;
+use App\Form\UpdateUserFormType;
 use App\Repository\ImageUserRepository;
 use App\Repository\UserImageRepository;
 use App\Repository\UserLoginRepository;
@@ -100,12 +100,23 @@ class AuthCustomController extends AbstractController
     {
         $image = $em->getRepository(UserImage::class)->find($userid);
         $user = new UserLogin();
-        $form = $this->createForm(UserLoginFormType::class,$user);
         $user = $em->getRepository(UserLogin::class)->find($userid);
+        $form = $this->createForm(UpdateUserFormType::class,$user, [
+            'username' => $user->getUsername(),
+            'password' => $user->getPassword(),
+            'firstname' => $user->getFirstname(),
+            'lastname' => $user->getLastname(),
+            'address' => $user->getAddress(),
+            'city' => $user->getCity(),
+            'description' => $user->getDescription(),
+            'postalcode' => $user->getPostalcode(),
+            'email' => $user->getEmail(),
+            'phone' => $user->getPhone()
+        ]);
         $form->handleRequest($request); // On récupère le formulaire envoyé dans la requête
         if ($form->isSubmitted() && $form->isValid()) { // on véfifie si le formulaire est envoyé et si il est valide
-            /** @var UploadedFile $File */
-            $File = $form->get('userImage')->get('filename')->getData();
+            ///** @var UploadedFile $File */
+            //$File = $form->get('userImage')->get('filename')->getData();
 
             $article = $form->getData(); // On récupère l'article associé
             $user =  $form->getData();
@@ -113,7 +124,7 @@ class AuthCustomController extends AbstractController
             $article->setPassword($encoded);
             $article->setCreationdate(New \DateTime());
             $article->setRoles(['ROLE_USER']);
-
+            /*
             if ($File) {
                 $originalFilename = pathinfo($File->getClientOriginalName(), PATHINFO_FILENAME);
                 // this is needed to safely include the file name as part of the URL
@@ -137,12 +148,12 @@ class AuthCustomController extends AbstractController
                 $article->setImageUser($image);
             }
 
-            $em->persist($image);
+            $em->persist($image);*/
             $em->persist($article); // on le persiste
             $em->flush(); // on save
             return $this->redirectToRoute('index');
         }
-        return $this->render('security/register.html.twig', ['form' => $form->createView()]); // Hop redirigé et on sort du controller
+        return $this->render('security/updateuser.html.twig', ['form' => $form->createView()]); // Hop redirigé et on sort du controller
     }
 
 
