@@ -33,7 +33,14 @@ class ProductController extends AbstractController
     /**
      * @Route("/shop",name="shop")
      **/
-    public function categories(EntityManagerInterface $em) {
+    public function categories(EntityManagerInterface $em, Request $request) {
+        $formMail = $this->createForm(SendMailFormType::class);
+        $formMail->handleRequest($request);
+        if ($formMail->isSubmitted() && $formMail->isValid()) {
+            $email = $formMail->getData()['email'];
+            return $this->redirectToRoute('sendmail', ["email" => $email]);
+        }
+
         $securityContext = $this->container->get('security.authorization_checker');
         if ($securityContext->isGranted('IS_AUTHENTICATED_ANONYMOUSLY ')) {
             dd("connecetd");
@@ -44,14 +51,22 @@ class ProductController extends AbstractController
             throw $this->createNotFoundException('Sorry, there is no product');
         }
         return $this->render('product/categories.html.twig', [
-            "products" => $products
+            "products" => $products,
+            'formMail' => $formMail->createView()
         ]);
     }
 
     /**
      * @Route("/product/{productId}",name="productDetails")
      **/
-    public function productDetails(EntityManagerInterface $em, $productId) {
+    public function productDetails(EntityManagerInterface $em, Request $request, $productId) {
+        $formMail = $this->createForm(SendMailFormType::class);
+        $formMail->handleRequest($request);
+        if ($formMail->isSubmitted() && $formMail->isValid()) {
+            $email = $formMail->getData()['email'];
+            return $this->redirectToRoute('sendmail', ["email" => $email]);
+        }
+
         $repository = $em->getRepository(Product::class);
         $product = $repository->find($productId);
         $repository = $em->getRepository(UserLogin::class);
@@ -65,19 +80,10 @@ class ProductController extends AbstractController
         }
         return $this->render('product/productDetails.html.twig', [
             "product" => $product,
-            "user" => $user
+            "user" => $user,
+            'formMail' => $formMail->createView()
         ]);
     }
-    /**
-     * @Route("/maps/{ville}/{pays}",name="maps")
-     **/
-    public function maps($ville, $pays) {
-        return $this->render('maps.html.twig', [
-            "ville" => $ville,
-            "pays" =>$pays
-        ]);
-    }
-
 
     /**
      * @Route("/publishproduct", name="publishproduct")
@@ -94,9 +100,6 @@ class ProductController extends AbstractController
             $email = $formMail->getData()['email'];
             return $this->redirectToRoute('sendmail', ["email" => $email]);
         }
-
-
-
 
         $product = new Product();
         $form = $this->createForm(CreateProductFormType::class,$product);
@@ -157,6 +160,14 @@ class ProductController extends AbstractController
         if( !$security->isGranted('IS_AUTHENTICATED_FULLY') ){
             return $this->redirectToRoute('app_login');
         }
+
+        $formMail = $this->createForm(SendMailFormType::class);
+        $formMail->handleRequest($request);
+        if ($formMail->isSubmitted() && $formMail->isValid()) {
+            $email = $formMail->getData()['email'];
+            return $this->redirectToRoute('sendmail', ["email" => $email]);
+        }
+
         $product = new Product();
         $product = $em->getRepository(Product::class)->find($productid);
         if($this->getUser() == $product->getUser()) {
@@ -179,7 +190,7 @@ class ProductController extends AbstractController
 
                 return $this->redirectToRoute('index'); // Hop redirigé et on sort du controller
             }
-            return $this->render('product/updateproduct.html.twig', ['form' => $form->createView()]); // on envoie ensuite le formulaire au template
+            return $this->render('product/updateproduct.html.twig', ['form' => $form->createView(), 'formMail' => $formMail->createView()]); // on envoie ensuite le formulaire au template
         }
         else {
             return $this->redirectToRoute("index");
@@ -191,6 +202,13 @@ class ProductController extends AbstractController
      */
     public function SearchProduct(Request $request, EntityManagerInterface $em)
     {
+        $formMail = $this->createForm(SendMailFormType::class);
+        $formMail->handleRequest($request);
+        if ($formMail->isSubmitted() && $formMail->isValid()) {
+            $email = $formMail->getData()['email'];
+            return $this->redirectToRoute('sendmail', ["email" => $email]);
+        }
+
         $form = $this->createForm(SearchProductFormType::class);
         $form->handleRequest($request); // On récupère le formulaire envoyé dans la requête
         if ($form->isSubmitted() && $form->isValid()) { // on véfifie si le formulaire est envoyé et si il est valide
@@ -201,15 +219,22 @@ class ProductController extends AbstractController
             if(!$names) {
                 throw $this->createNotFoundException('Sorry, there is no product with this name');
             }
-            return $this->render('test.html.twig', ['form' => $form->createView(), 'result'=>$names]); // Hop redirigé et on sort du controller
+            return $this->render('test.html.twig', ['form' => $form->createView(), 'formMail' => $formMail->createView(), 'result'=>$names]); // Hop redirigé et on sort du controller
         }
-        return $this->render('test.html.twig', ['form' => $form->createView()]); // on envoie ensuite le formulaire au template
+        return $this->render('test.html.twig', ['form' => $form->createView(), 'formMail' => $formMail->createView()]); // on envoie ensuite le formulaire au template
     }
     /**
      * @Route("/searchproductbycategory/{category}", name="searchproductbycategory")
      */
     public function SearchProductByCategory(Request $request, EntityManagerInterface $em, $category)
     {
+        $formMail = $this->createForm(SendMailFormType::class);
+        $formMail->handleRequest($request);
+        if ($formMail->isSubmitted() && $formMail->isValid()) {
+            $email = $formMail->getData()['email'];
+            return $this->redirectToRoute('sendmail', ["email" => $email]);
+        }
+
         $form = $this->createForm(SearchProductFormType::class);
         $form->handleRequest($request); // On récupère le formulaire envoyé dans la requête
         if ($form->isSubmitted() && $form->isValid()) { // on véfifie si le formulaire est envoyé et si il est valide
@@ -220,9 +245,9 @@ class ProductController extends AbstractController
             if(!$names) {
                 throw $this->createNotFoundException('Sorry, there is no product with this name');
             }
-            return $this->render('test.html.twig', ['form' => $form->createView(), 'result'=>$names]); // Hop redirigé et on sort du controller
+            return $this->render('test.html.twig', ['form' => $form->createView(), 'formMail' => $formMail->createView(), 'result'=>$names]); // Hop redirigé et on sort du controller
         }
-        return $this->render('test.html.twig', ['form' => $form->createView()]); // on envoie ensuite le formulaire au template
+        return $this->render('test.html.twig', ['form' => $form->createView(), 'formMail' => $formMail->createView()]); // on envoie ensuite le formulaire au template
     }
 
      /**

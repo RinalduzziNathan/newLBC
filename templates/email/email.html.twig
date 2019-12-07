@@ -1,0 +1,16 @@
+{% if user != null %}
+    <h2>Merci {{ user.getFirstname() }} de vous être abonné à notre NewsLettre</h2>
+    <br><br>
+        <p>Pour accéder au site:<a href="{{ path('index') }}"> CLIQUER ICI /!\</a></p><br>
+        <p>Pour modifier votre profile:<a href="{{ path('editprofile', {userid: user.id }) }}"> CLIQUER ICI /!\</a></p>
+        <p>Pour accéder à votre profile:<a href="{{ path('profile', {id: user.id }) }}"> CLIQUER ICI /!\</a></p><br>
+        <p>Pour déposer une annonce:<a href="{{ path('publishproduct') }}"> CLIQUER ICI /!\</a></p><br>
+        <p>Pour accéder au shop de notre site:<a href="{{ path('shop') }}"> CLIQUER ICI /!\</a></p>
+{% else %}
+    <h2>Merci de vous être abonné à notre NewsLettre</h2>
+    <br><br>
+        <p>Pour accéder au site:<a href="{{ path('index') }}"> CLIQUER ICI /!\</a></p><br>
+        <p>Pour accéder au shop de notre site:<a href="{{ path('shop') }}"> CLIQUER ICI /!\</a></p>
+        <p>Pour vous connectez:<a href="{{ path('app_login') }}"> CLIQUER ICI /!\</a></p>
+        <p>Pour vous enregister:<a href="{{ path('register') }}"> CLIQUER ICI /!\</a></p>
+{% endif %}

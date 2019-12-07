@@ -45,16 +45,33 @@ class HomepageController extends AbstractController
      */
     public function SendMail(Swift_Mailer $mailer, $email)
     {
-
+        if($this->getUser() != null)
+            $user = $this->getUser();
+        else
+            $user = null;
         $message = (new \Swift_Message('Hello Email'))
             ->setFrom('maiscetaitsur@gmail.com')
             ->setTo($email)
             ->setBody(
-                "Hey c'est un super mail ça!!"
+                $this->renderView(
+                    'email/email.html.twig', [
+                    "user" => $user
+                ])
             )
         ;
         $mailer->send($message);
 
         return $this->redirectToRoute("index");
+    }
+
+    /**
+     * @Route("/mail", name="mail")
+     */
+    public function Mail()
+    {
+        $user = $this->getUser();
+        return $this->render('email/email.html.twig', [
+            "user" => $user
+        ]);
     }
 }
