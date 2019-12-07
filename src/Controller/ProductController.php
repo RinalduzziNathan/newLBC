@@ -7,6 +7,7 @@ use App\Entity\ProductImage;
 use App\Entity\UserLogin;
 use App\Form\CreateProductFormType;
 use App\Form\SearchProductFormType;
+use App\Form\UpdateProductFormType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -127,6 +128,44 @@ class ProductController extends AbstractController
 
         return $this->render('product/publishproduct.html.twig', ['form' => $form->createView()]); // on envoie ensuite le formulaire au template
     }
+
+    /**
+     * @Route("/editproduct/{productid}", name="editproduct")
+     */
+    public function EditProduct(Request $request, EntityManagerInterface $em, Security $security, $productid)
+    {
+        if( !$security->isGranted('IS_AUTHENTICATED_FULLY') ){
+            return $this->redirectToRoute('app_login');
+        }
+        $product = new Product();
+        $product = $em->getRepository(Product::class)->find($productid);
+        if($this->getUser() == $product->getUser()) {
+            $form = $this->createForm(UpdateProductFormType::class, $product, [
+                'name' => $product->getName(),
+                'description' => $product->getDescription(),
+                'price' => $product->getPrice(),
+                'category' => $product->getCategory(),
+                'state' => $product->getState(),
+            ]);
+            $form->handleRequest($request); // On récupère le formulaire envoyé dans la requête
+            if ($form->isSubmitted() && $form->isValid()) { // on véfifie si le formulaire est envoyé et si il est valide
+                $article = $form->getData(); // On récupère l'article associé
+                $article->setUser($security->getUser());
+                $article->setPublishdate(New \DateTime());
+                //$article->clear();
+
+                $em->persist($article); // on le persiste
+                $em->flush(); // on save
+
+                return $this->redirectToRoute('index'); // Hop redirigé et on sort du controller
+            }
+            return $this->render('product/updateproduct.html.twig', ['form' => $form->createView()]); // on envoie ensuite le formulaire au template
+        }
+        else {
+            return $this->redirectToRoute("index");
+        }
+    }
+
     /**
      * @Route("/searchproduct", name="searchproduct")
      */

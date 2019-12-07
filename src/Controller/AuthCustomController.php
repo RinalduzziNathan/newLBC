@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\UserImage;
 use App\Entity\UserLogin;
 use App\Form\UpdateUserFormType;
+use App\Form\UserLoginFormType;
 use App\Repository\ImageUserRepository;
 use App\Repository\UserImageRepository;
 use App\Repository\UserLoginRepository;
@@ -98,62 +99,42 @@ class AuthCustomController extends AbstractController
      */
     public function editprofile(Request $request, UserPasswordEncoderInterface $encoder,EntityManagerInterface $em, $userid)
     {
-        $image = $em->getRepository(UserImage::class)->find($userid);
-        $user = new UserLogin();
-        $user = $em->getRepository(UserLogin::class)->find($userid);
-        $form = $this->createForm(UpdateUserFormType::class,$user, [
-            'username' => $user->getUsername(),
-            'password' => $user->getPassword(),
-            'firstname' => $user->getFirstname(),
-            'lastname' => $user->getLastname(),
-            'address' => $user->getAddress(),
-            'city' => $user->getCity(),
-            'description' => $user->getDescription(),
-            'postalcode' => $user->getPostalcode(),
-            'email' => $user->getEmail(),
-            'phone' => $user->getPhone()
-        ]);
-        $form->handleRequest($request); // On récupère le formulaire envoyé dans la requête
-        if ($form->isSubmitted() && $form->isValid()) { // on véfifie si le formulaire est envoyé et si il est valide
-            ///** @var UploadedFile $File */
-            //$File = $form->get('userImage')->get('filename')->getData();
-
-            $article = $form->getData(); // On récupère l'article associé
-            $user =  $form->getData();
-            $encoded = $encoder->encodePassword($article, $article->getPassword());
-            $article->setPassword($encoded);
-            $article->setCreationdate(New \DateTime());
-            $article->setRoles(['ROLE_USER']);
-            /*
-            if ($File) {
-                $originalFilename = pathinfo($File->getClientOriginalName(), PATHINFO_FILENAME);
-                // this is needed to safely include the file name as part of the URL
-
-                $safeFilename = preg_replace('/[^A-Za-z0-9]/', "",$originalFilename);
-                $newFilename = $safeFilename.'-'.uniqid().'.'.$File->guessExtension();
-
-                // Move the file to the directory where brochures are stored
-                try {
-                    $File->move(
-                        $this->getParameter('file_directory'),
-                        $newFilename
-                    );
-                } catch (FileException $e) {
-                    // ... handle exception if something happens during file upload
+        if ($this->getUser() != null)
+        {
+            if ($this->getUser()->getId() == $userid) {
+                $image = $em->getRepository(UserImage::class)->find($userid);
+                $user = new UserLogin();
+                $user = $em->getRepository(UserLogin::class)->find($userid);
+                $form = $this->createForm(UpdateUserFormType::class, $user, [
+                    'username' => $user->getUsername(),
+                    'password' => $user->getPassword(),
+                    'firstname' => $user->getFirstname(),
+                    'lastname' => $user->getLastname(),
+                    'address' => $user->getAddress(),
+                    'city' => $user->getCity(),
+                    'description' => $user->getDescription(),
+                    'postalcode' => $user->getPostalcode(),
+                    'email' => $user->getEmail(),
+                    'phone' => $user->getPhone()
+                ]);
+                $form->handleRequest($request); // On récupère le formulaire envoyé dans la requête
+                if ($form->isSubmitted() && $form->isValid()) { // on véfifie si le formulaire est envoyé et si il est valide
+                    $article = $form->getData(); // On récupère l'article associé
+                    $user = $form->getData();
+                    $encoded = $encoder->encodePassword($article, $article->getPassword());
+                    $article->setPassword($encoded);
+                    $article->setCreationdate(New \DateTime());
+                    $article->setRoles(['ROLE_USER']);
+                    $em->persist($article); // on le persiste
+                    $em->flush(); // on save
+                    return $this->redirectToRoute('index');
                 }
-
-                // updates the 'brochureFilename' property to store the PDF file name
-                $image->setFilename($newFilename);
-                $image->setUser($user);
-                $article->setImageUser($image);
+                return $this->render('security/updateuser.html.twig', ['form' => $form->createView()]); // Hop redirigé et on sort du controller
             }
-
-            $em->persist($image);*/
-            $em->persist($article); // on le persiste
-            $em->flush(); // on save
-            return $this->redirectToRoute('index');
         }
-        return $this->render('security/updateuser.html.twig', ['form' => $form->createView()]); // Hop redirigé et on sort du controller
+        else {
+            return $this->redirectToRoute("index");
+        }
     }
 
 
