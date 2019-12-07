@@ -19,15 +19,15 @@ class UpdateUserFormType extends AbstractType
     {
         $builder
             ->add('username' , TextType::class,[
-                'attr'=> ['class'=> 'form-control',"placeholder"=>$options['username']],
+                'attr'=> ['class'=> 'form-control',"placeholder"=>$options['pseudo']],
                 'label' => false,
             ])
             ->add('firstname', TextType::class,[
-                'attr'=> ['class'=> 'form-control',"placeholder"=>$options['firstname']],
+                'attr'=> ['class'=> 'form-control',"placeholder"=>$options['nom']],
                 'label' => false,
                 'required' => true,])
             ->add('lastname', TextType::class,[
-                'attr'=> ['class'=> 'form-control',"placeholder"=>$options['lastname']],
+                'attr'=> ['class'=> 'form-control',"placeholder"=>$options['prenom']],
                 'label' => false,
                 'required' => true,])
             ->add('email', TextType::class,[
@@ -46,7 +46,7 @@ class UpdateUserFormType extends AbstractType
                 'first_options'  => [
                     'attr'=> ['class'=> 'form-control',"placeholder"=>"MDP"],"label"=>false],
                 'second_options' => [
-                    'attr'=> ['class'=> 'form-control',"placeholder"=>"Repeat MDP"],"label"=>false,],
+                    'attr'=> ['class'=> 'form-control',"placeholder"=>"Repeter MDP"],"label"=>false,],
             ])
             ->add('address', TextType::class,[
                 'attr'=> ['class'=> 'form-control',"placeholder"=>$options['address']],

@@ -77,10 +77,8 @@
             <!-- Amado Nav -->
             <nav class="amado-nav">
                 <ul>
-                    <li class="active"><a href="{{  path('index') }}">Home</a></li>
-                    <li><a href="{{  path('shop') }}">Shop</a></li>
-                    <li><a href="cart.html">Cart</a></li>
-                    <li><a href="checkout.html">Checkout</a></li>
+                    <li class="active"><a href="{{  path('index') }}">Acceuil</a></li>
+                    <li><a href="{{  path('shop') }}">Boutique</a></li>
                 </ul>
             </nav>
             <!-- Button Group -->
@@ -88,12 +86,12 @@
                 <a href="{{  path('publishproduct') }}" class="btn amado-btn mb-15">Déposer votre anonce</a>
                 <!-- Trigger the modal with a button -->
                 {% if not app.user %}
-                    <a type="button" class="btn amado-btn active mb-15" href="{{  path('app_login') }}">Login</a>
-                    <a type="text"  class="text-warning stretched-link register d-flex justify-content-end " href="{{  path('register') }}">Register</a>
+                    <a type="button" class="btn amado-btn active mb-15" href="{{  path('app_login') }}">Se connecter</a>
+                    <a type="text"  class="text-warning stretched-link register d-flex justify-content-end " href="{{  path('register') }}">Créer un compte</a>
 
                 {% endif %}
                 {% if app.user %}
-                    <a type="text"  class="text-warning stretched-link register d-flex justify-content-end " href="{{  path('app_logout') }}">Logout</a>
+                    <a type="text"  class="text-warning stretched-link register d-flex justify-content-end " href="{{  path('app_logout') }}">Se déconnecter</a>
                 {% endif %}
             </div>
             <!-- Cart Menu -->
@@ -101,8 +99,8 @@
                 {% if app.user %}
                     <a href="{{ path('profile', {id: app.user.id }) }}" class="acount-nav"><i class="fa fa-user"> </i> {{ app.user.username }} </a>
                 {% endif %}
-                <a href="#" class="fav-nav"><i class="fa fa-star"></i> Favourite</a>
-                <a href="#" class="search-nav"><i class="fa fa-search"></i> Search</a>
+                <a href="#" class="fav-nav"><i class="fa fa-star"></i> Favoris</a>
+                <a href="#" class="search-nav"><i class="fa fa-search"></i> Rechercher</a>
             </div>
             <!-- Social Button -->
             <div class="social-info d-flex justify-content-between">
@@ -163,7 +161,7 @@
                         </div>
                         <!-- Copywrite Text -->
                         <p class="copywrite">Copyright ©2019 All rights reserved.</br>
-                            Made with <i class="fa fa-heart-o" aria-hidden="true"></i> by Tomper Natmad and Louis
+                            Made with <i class="fa fa-heart-o" aria-hidden="true"></i> by Tomper, Natmad and Louis
                         </p>
 
                     </div>
@@ -178,10 +176,10 @@
                                 <div class="collapse navbar-collapse" id="footerNavContent">
                                     <ul class="navbar-nav ml-auto">
                                         <li class="nav-item active">
-                                            <a class="nav-link" href="{{  path('index') }}">Home</a>
+                                            <a class="nav-link" href="{{  path('index') }}">Acceuil</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="{{  path('shop') }}">Shop</a>
+                                            <a class="nav-link" href="{{  path('shop') }}">Boutique</a>
                                         </li>
                                     </ul>
                                 </div>

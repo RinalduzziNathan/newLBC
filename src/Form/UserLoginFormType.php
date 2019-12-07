@@ -21,7 +21,7 @@ class UserLoginFormType extends AbstractType
     {
         $builder
             ->add('username' , TextType::class,[
-                'attr'=> ['class'=> 'form-control',"placeholder"=>"Username"],
+                'attr'=> ['class'=> 'form-control',"placeholder"=>"Pseudo"],
                 'label' => false,
             ])
             ->add('firstname', TextType::class,[
@@ -48,7 +48,7 @@ class UserLoginFormType extends AbstractType
                 'first_options'  => [
                     'attr'=> ['class'=> 'form-control',"placeholder"=>"MDP"],"label"=>false],
                 'second_options' => [
-                    'attr'=> ['class'=> 'form-control',"placeholder"=>"Repeat MDP"],"label"=>false,],
+                    'attr'=> ['class'=> 'form-control',"placeholder"=>"Repeter MDP"],"label"=>false,],
             ])
             ->add('address', TextType::class,[
                 'attr'=> ['class'=> 'form-control',"placeholder"=>"Adresse"],
@@ -63,7 +63,7 @@ class UserLoginFormType extends AbstractType
                 'label' => false,
                 'required' => true,] )
             ->add('description',TextareaType::class,[
-                'attr' =>['class'=> 'form-control w-100',"placeholder"=>"Leave a description about you", "cols"=>"30", "rows"=>"10"],
+                'attr' =>['class'=> 'form-control w-100',"placeholder"=>"Decrivez vous !", "cols"=>"30", "rows"=>"10"],
                 'label' => false,
                 'required' => false,])
             ->add('userImage',ImportImageUserFormType::class)
