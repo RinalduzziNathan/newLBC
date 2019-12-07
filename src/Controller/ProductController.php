@@ -15,7 +15,10 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+
 class ProductController extends AbstractController
 {
 
@@ -204,4 +207,24 @@ class ProductController extends AbstractController
         }
         return $this->render('test.html.twig', ['form' => $form->createView()]); // on envoie ensuite le formulaire au template
     }
+
+     /**
+     * @Route("/product/IMMOBILIER/{productname}")
+   
+     */
+    public function GetMeubleName($productname,EntityManagerInterface $em){
+        $repository = $em->getRepository(Product::class);
+        $product = $repository->findByNameAndCategory($productname, "immobilier");
+       
+        $Array = [
+            1=>["tête","pied","jambe","rein"],
+            2=>"jaaaaj",
+            3=>"foo()"
+        ];
+       // dd($product);
+        return new JsonResponse($Array);
+    }
+
+
+
 }
