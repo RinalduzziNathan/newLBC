@@ -31,14 +31,13 @@ class HomepageController extends AbstractController
     }
 
     /**
-     * @Route("/sendmail", name="sendmail")
+     * @Route("/sendmail/{email}", name="sendmail")
      */
-    public function SendMail(Swift_Mailer $mailer)
+    public function SendMail(Swift_Mailer $mailer, $email)
     {
-        dd($mailer);
         $message = (new \Swift_Message('Hello Email'))
             ->setFrom('maiscetaitsur@gmail.com')
-            ->setTo('kraknistic.43@gmail.com')
+            ->setTo($email)
             ->setBody(
                 "Hey c'est un super mail ça!!"
             )
