@@ -3,21 +3,28 @@
 namespace App\Controller;
 
 use App\Entity\Product;
-use App\Entity\ProductImage;
 use App\Entity\UserLogin;
+use App\Entity\ProductImage;
 use App\Form\CreateProductFormType;
 use App\Form\SearchProductFormType;
 use App\Form\UpdateProductFormType;
-use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+
+
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
+
 
 class ProductController extends AbstractController
 {
@@ -209,20 +216,26 @@ class ProductController extends AbstractController
     }
 
      /**
-     * @Route("/product/IMMOBILIER/{productname}")
-   
+     * @Route("/product/immobilier/{productname}")
+
      */
     public function GetMeubleName($productname,EntityManagerInterface $em){
-        $repository = $em->getRepository(Product::class);
-        $product = $repository->findByNameAndCategory($productname, "immobilier");
-       
-        $Array = [
+         $Array = [
             1=>["tête","pied","jambe","rein"],
             2=>"jaaaaj",
             3=>"foo()"
         ];
-       // dd($product);
-        return new JsonResponse($Array);
+         $repository = $em->getRepository(Product::class);
+         $product = $repository->findByNameAndCategory($productname, "immobilier");
+     // dd($product);
+        // $encoders = array(new JsonEncoder());
+        // $normalizers = array(new ObjectNormalizer());
+        // $serializer = new Serializer($normalizers, $encoders);
+        // $productSerialized = $serializer->serialize($product, 'json');
+       
+        $response = new Response(json_encode($product));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
     }
 
 
