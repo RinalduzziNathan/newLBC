@@ -35,7 +35,7 @@ class HomepageController extends AbstractController
      */
     public function SendMail(Swift_Mailer $mailer)
     {
-        dd($mailer);
+
         $message = (new \Swift_Message('Hello Email'))
             ->setFrom('maiscetaitsur@gmail.com')
             ->setTo('kraknistic.43@gmail.com')
