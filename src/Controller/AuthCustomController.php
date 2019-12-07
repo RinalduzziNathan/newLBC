@@ -6,7 +6,6 @@ use App\Entity\UserImage;
 use App\Entity\UserLogin;
 use App\Form\UserLoginFormType;
 use App\Form\UpdateUserFormType;
-use App\Form\UserLoginFormType;
 use App\Repository\ImageUserRepository;
 use App\Repository\UserImageRepository;
 use App\Repository\UserLoginRepository;

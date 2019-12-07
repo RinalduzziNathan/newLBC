@@ -28,4 +28,22 @@ class HomepageController extends AbstractController
             "products" => $products
         ]);
     }
+
+    /**
+     * @Route("/sendmail", name="sendmail")
+     */
+    public function SendMail(\Swift_Mailer $mailer)
+    {
+        $message = (new \Swift_Message('NewsLetter'))
+            ->setFrom('maiscetaitsur@example.com')
+            ->setTo('kraknistic.43@gmail.com')
+            ->setBody(
+                "Hey c'est un super mail ça!!"
+            )
+        ;
+
+        $mailer->send($message);
+
+        return $this->redirectToRoute("index");
+    }
 }
