@@ -51,7 +51,6 @@ class AuthCustomController extends AbstractController
     */
     public function register(Request $request, UserPasswordEncoderInterface $encoder,EntityManagerInterface $em)
     {
-
         $user = new UserLogin();
         $image = new UserImage();
         $form = $this->createForm(UserLoginFormType::class,$user);
@@ -102,6 +101,7 @@ class AuthCustomController extends AbstractController
             $em->persist($image);
             $em->persist($article); // on le persiste
             $em->flush(); // on save
+            $this->redirectToRoute('sendmail', ['email' => $user->getEmail()]);
             return $this->redirectToRoute('index');
         }
         return $this->render('security/register.html.twig', ['form' => $form->createView(),'formMail' => $formMail->createView()]); // Hop redirigé et on sort du controller
