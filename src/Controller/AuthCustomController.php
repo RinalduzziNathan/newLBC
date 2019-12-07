@@ -43,7 +43,6 @@ class AuthCustomController extends AbstractController
             $email = $formMail->getData()['email'];
             return $this->redirectToRoute('sendmail', ["email" => $email]);
         }
-
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername,'formMail' => $formMail->createView(), 'error' => $error]);
         //return new RedirectResponse($this->urlGenerator->generate('/login'));
     }
@@ -57,6 +56,14 @@ class AuthCustomController extends AbstractController
         $image = new UserImage();
         $form = $this->createForm(UserLoginFormType::class,$user);
         $form->handleRequest($request); // On récupère le formulaire envoyé dans la requête
+
+        $formMail = $this->createForm(SendMailFormType::class);
+        $formMail->handleRequest($request);
+        if ($formMail->isSubmitted() && $formMail->isValid()) {
+            $email = $formMail->getData()['email'];
+            return $this->redirectToRoute('sendmail', ["email" => $email]);
+        }
+
         if ($form->isSubmitted() && $form->isValid()) { // on véfifie si le formulaire est envoyé et si il est valide
             /** @var UploadedFile $File */
             $File = $form->get('userImage')->get('filename')->getData();
@@ -97,7 +104,7 @@ class AuthCustomController extends AbstractController
             $em->flush(); // on save
             return $this->redirectToRoute('index');
         }
-        return $this->render('security/register.html.twig', ['form' => $form->createView()]); // Hop redirigé et on sort du controller
+        return $this->render('security/register.html.twig', ['form' => $form->createView(),'formMail' => $formMail->createView()]); // Hop redirigé et on sort du controller
     }
 
     /**
@@ -105,6 +112,13 @@ class AuthCustomController extends AbstractController
      */
     public function editprofile(Request $request, UserPasswordEncoderInterface $encoder,EntityManagerInterface $em, $userid)
     {
+        $formMail = $this->createForm(SendMailFormType::class);
+        $formMail->handleRequest($request);
+        if ($formMail->isSubmitted() && $formMail->isValid()) {
+            $email = $formMail->getData()['email'];
+            return $this->redirectToRoute('sendmail', ["email" => $email]);
+        }
+
         if ($this->getUser() != null)
         {
             if ($this->getUser()->getId() == $userid) {
@@ -135,7 +149,7 @@ class AuthCustomController extends AbstractController
                     $em->flush(); // on save
                     return $this->redirectToRoute('index');
                 }
-                return $this->render('security/updateuser.html.twig', ['form' => $form->createView()]); // Hop redirigé et on sort du controller
+                return $this->render('security/updateuser.html.twig', ['form' => $form->createView(),'formMail' => $formMail->createView()]); // Hop redirigé et on sort du controller
             }
         }
         else {
@@ -155,15 +169,23 @@ class AuthCustomController extends AbstractController
     /**
      * @Route("/profile/{id}", name="profile", methods={"GET"})
      */
-    public function UserInfo(EntityManagerInterface $em, $id)
+    public function UserInfo(EntityManagerInterface $em, Request $request, $id)
     {
+        $formMail = $this->createForm(SendMailFormType::class);
+        $formMail->handleRequest($request);
+        if ($formMail->isSubmitted() && $formMail->isValid()) {
+            $email = $formMail->getData()['email'];
+            return $this->redirectToRoute('sendmail', ["email" => $email]);
+        }
+
         $repository = $em->getRepository(UserLogin::class);
         $user = $repository->find($id);
         if(!$user) {
             throw $this->createNotFoundException('Sorry, there is no user with this id');
         }
         return $this->render('security/profile.html.twig', [
-            "user" => $user
+            "user" => $user,
+            'formMail' => $formMail->createView()
         ]);
     }
 }
