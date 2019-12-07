@@ -56,7 +56,7 @@ class ProductRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-    public function findByNameAndCategory($product, $category): array
+    public function findByNameAndCategory($product, $category)
     {
         return $this->createQueryBuilder('p')
             ->where('p.category LIKE :keycategory')
@@ -64,6 +64,7 @@ class ProductRepository extends ServiceEntityRepository
             ->andwhere('p.name LIKE :keyproduct')
             ->setParameter( 'keyproduct', "%$product%")
             ->orderBy('p.name')
+            ->setMaxResults(10)
             ->getQuery()
             ->getResult();
     }
