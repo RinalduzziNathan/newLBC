@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Swift_Mailer;
 use App\Entity\Product;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -32,16 +33,16 @@ class HomepageController extends AbstractController
     /**
      * @Route("/sendmail", name="sendmail")
      */
-    public function SendMail(\Swift_Mailer $mailer)
+    public function SendMail(Swift_Mailer $mailer)
     {
-        $message = (new \Swift_Message('NewsLetter'))
-            ->setFrom('maiscetaitsur@example.com')
+        dd($mailer);
+        $message = (new \Swift_Message('Hello Email'))
+            ->setFrom('maiscetaitsur@gmail.com')
             ->setTo('kraknistic.43@gmail.com')
             ->setBody(
                 "Hey c'est un super mail ça!!"
             )
         ;
-
         $mailer->send($message);
 
         return $this->redirectToRoute("index");
