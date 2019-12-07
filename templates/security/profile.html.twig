@@ -8,7 +8,11 @@
             </div>
             <div class="profile-user-settings">
                 <h1 class="profile-user-name">{{ user.getUserName() }}</h1>
-                <button class="btn profile-edit-btn amado-btn "><i class="fa fa-cog" aria-hidden="true"></i> Edit Profile</button>
+                {% if app.user %}
+                    {% if app.user.id == user.getId() %}
+                        <a href="{{ path('editprofile', {userid: app.user.id }) }}" class="btn profile-edit-btn amado-btn "><i class="fa fa-cog" aria-hidden="true"></i> Edit Profile</a>
+                    {% endif %}
+                {% endif %}
             </div>
             <div class="profile-stats">
                 <ul>
@@ -23,6 +27,9 @@
         <!-- End of profile section -->
 
         <div class="amado-pro-catagory clearfix">
+            {%if user.getProducts()|length == 0%}
+                <p> Cette utilisateur n'a aucune offre en ligne.</p>
+            {% endif %}
             {% for product in user.getProducts() %}
                 <!-- Single Catagory -->
                 <div class="single-products-catagory clearfix">
