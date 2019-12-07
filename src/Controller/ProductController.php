@@ -10,21 +10,21 @@ use App\Form\SearchProductFormType;
 use App\Form\SendMailFormType;
 use App\Form\UpdateProductFormType;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Routing\Annotation\Route;
-use Doctrine\Common\Collections\ArrayCollection;
+
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-
-
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
+
 
 
 class ProductController extends AbstractController
@@ -236,18 +236,16 @@ class ProductController extends AbstractController
             3=>"foo()"
         ];
          $repository = $em->getRepository(Product::class);
-         $product = $repository->findByNameAndCategory($productname, "immobilier");
-            dd($product);
-        // $encoders = array(new JsonEncoder());
-        // $normalizers = array(new ObjectNormalizer());
-        // $serializer = new Serializer($normalizers, $encoders);
-        // $productSerialized = $serializer->serialize($product, 'json');
-       
-        $response = new Response(json_encode($product));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
+         //$product = $repository->findByNameAndCategory($productname, "immobilier");
+         $product = $repository->find(9);
+        $encoder = new JsonEncoder();
+        $defaultContext = [
+            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+                return $object->getId();
+            },
+        ];
+        $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
+        $serializer = new Serializer([$normalizer], [$encoder]);
+        return new JsonResponse($serializer->serialize($product, 'json'));
     }
-
-
-
 }
