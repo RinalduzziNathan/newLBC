@@ -1,6 +1,7 @@
 mapboxgl.accessToken = 'pk.eyJ1Ijoia3Jha25pc3RpYyIsImEiOiJjazF4eTY2NmYwZzZ2M21xZ2NqNW81aWp0In0.fbP9E6XJtuUbsNvh5eHjkw';
 var map = mapboxSdk({ accessToken: mapboxgl.accessToken});
 var lieu = jQuery('#map_product').attr('data-lieu');
+
 lieu = lieu+',"France"';
 map.geocoding.forwardGeocode({
     query: lieu,
@@ -37,3 +38,9 @@ map.geocoding.forwardGeocode({
         // Add zoom and rotation controls to the map.
         map.addControl(new mapboxgl.NavigationControl());
     });
+var name = jQuery('#revealbutton').attr('data-phone');
+
+var revealbutton= document.getElementById("revealbutton");
+revealbutton.onclick = function() {
+    revealbutton.innerText=name;
+};
