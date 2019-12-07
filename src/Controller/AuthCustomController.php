@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\UserImage;
 use App\Entity\UserLogin;
+use App\Form\SendMailFormType;
 use App\Form\UserLoginFormType;
 use App\Form\UpdateUserFormType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,7 +26,7 @@ class AuthCustomController extends AbstractController
      * @param AuthenticationUtils $authenticationUtils
      * @return Response
      */
-    public function login(AuthenticationUtils $authenticationUtils): Response
+    public function login(AuthenticationUtils $authenticationUtils ,Request $request): Response
     {
         // if ($this->getUser()) {
         //     return $this->redirectToRoute('index');
@@ -36,8 +37,14 @@ class AuthCustomController extends AbstractController
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
-       // dd($lastUsername);
-        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+        $formMail = $this->createForm(SendMailFormType::class);
+        $formMail->handleRequest($request);
+        if ($formMail->isSubmitted() && $formMail->isValid()) {
+            $email = $formMail->getData()['email'];
+            return $this->redirectToRoute('sendmail', ["email" => $email]);
+        }
+
+        return $this->render('security/login.html.twig', ['last_username' => $lastUsername,'formMail' => $formMail->createView(), 'error' => $error]);
         //return new RedirectResponse($this->urlGenerator->generate('/login'));
     }
     /**

@@ -27,15 +27,16 @@ class HomepageController extends AbstractController
         if(!$products) {
             throw $this->createNotFoundException('Sorry, there is no product');
         }
-        $form = $this->createForm(SendMailFormType::class);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $email = $form->getData()['email'];
+
+        $formMail = $this->createForm(SendMailFormType::class);
+        $formMail->handleRequest($request);
+        if ($formMail->isSubmitted() && $formMail->isValid()) {
+            $email = $formMail->getData()['email'];
             return $this->redirectToRoute('sendmail', ["email" => $email]);
         }
 
             return $this->render('homepage/index.html.twig', [
-            "products" => $products, 'form' => $form->createView()
+            "products" => $products, 'formMail' => $formMail->createView()
         ]);
     }
 

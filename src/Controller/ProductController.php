@@ -7,6 +7,7 @@ use App\Entity\UserLogin;
 use App\Entity\ProductImage;
 use App\Form\CreateProductFormType;
 use App\Form\SearchProductFormType;
+use App\Form\SendMailFormType;
 use App\Form\UpdateProductFormType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Serializer\Serializer;
@@ -87,8 +88,17 @@ class ProductController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        $product = new Product();
+        $formMail = $this->createForm(SendMailFormType::class);
+        $formMail->handleRequest($request);
+        if ($formMail->isSubmitted() && $formMail->isValid()) {
+            $email = $formMail->getData()['email'];
+            return $this->redirectToRoute('sendmail', ["email" => $email]);
+        }
 
+
+
+
+        $product = new Product();
         $form = $this->createForm(CreateProductFormType::class,$product);
         $form->handleRequest($request); // On récupère le formulaire envoyé dans la requête
         if ($form->isSubmitted() && $form->isValid()) { // on véfifie si le formulaire est envoyé et si il est valide
@@ -136,7 +146,7 @@ class ProductController extends AbstractController
             return $this->redirectToRoute('index'); // Hop redirigé et on sort du controller
         }
 
-        return $this->render('product/publishproduct.html.twig', ['form' => $form->createView()]); // on envoie ensuite le formulaire au template
+        return $this->render('product/publishproduct.html.twig', ['form' => $form->createView(),'formMail' => $formMail->createView()]); // on envoie ensuite le formulaire au template
     }
 
     /**
@@ -227,7 +237,7 @@ class ProductController extends AbstractController
         ];
          $repository = $em->getRepository(Product::class);
          $product = $repository->findByNameAndCategory($productname, "immobilier");
-     // dd($product);
+            dd($product);
         // $encoders = array(new JsonEncoder());
         // $normalizers = array(new ObjectNormalizer());
         // $serializer = new Serializer($normalizers, $encoders);
