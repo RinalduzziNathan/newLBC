@@ -6,10 +6,6 @@ use App\Entity\UserImage;
 use App\Entity\UserLogin;
 use App\Form\UserLoginFormType;
 use App\Form\UpdateUserFormType;
-use App\Form\UserLoginFormType;
-use App\Repository\ImageUserRepository;
-use App\Repository\UserImageRepository;
-use App\Repository\UserLoginRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -49,6 +45,7 @@ class AuthCustomController extends AbstractController
     */
     public function register(Request $request, UserPasswordEncoderInterface $encoder,EntityManagerInterface $em)
     {
+
         $user = new UserLogin();
         $image = new UserImage();
         $form = $this->createForm(UserLoginFormType::class,$user);
@@ -82,6 +79,7 @@ class AuthCustomController extends AbstractController
 
                 // updates the 'brochureFilename' property to store the PDF file name
                 // instead of its contents
+
                 $image->setFilename($newFilename);
                 $image->setUser($user);
                 $article->setImageUser($image);
