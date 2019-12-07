@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
+use App\Form\SendMailFormType;
 use Swift_Mailer;
 use App\Entity\Product;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class HomepageController extends AbstractController
@@ -13,8 +15,9 @@ class HomepageController extends AbstractController
     /**
      * @Route("/", name="index")
      */
-    public function index(EntityManagerInterface $em)
+    public function index(EntityManagerInterface $em, Request $request)
     {
+
         $securityContext = $this->container->get('security.authorization_checker');
         if ($securityContext->isGranted('IS_AUTHENTICATED_ANONYMOUSLY ')) {
             dd("connected");
@@ -24,9 +27,15 @@ class HomepageController extends AbstractController
         if(!$products) {
             throw $this->createNotFoundException('Sorry, there is no product');
         }
+        $form = $this->createForm(SendMailFormType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $email = $form->getData()['email'];
+            return $this->redirectToRoute('sendmail', ["email" => $email]);
+        }
 
-        return $this->render('homepage/index.html.twig', [
-            "products" => $products
+            return $this->render('homepage/index.html.twig', [
+            "products" => $products, 'form' => $form->createView()
         ]);
     }
 

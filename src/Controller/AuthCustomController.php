@@ -116,9 +116,9 @@ class AuthCustomController extends AbstractController
                     'email' => $user->getEmail(),
                     'phone' => $user->getPhone()
                 ]);
-                $form->handleRequest($request); // On récupère le formulaire envoyé dans la requête
-                if ($form->isSubmitted() && $form->isValid()) { // on véfifie si le formulaire est envoyé et si il est valide
-                    $article = $form->getData(); // On récupère l'article associé
+                $form->handleRequest($request);
+                if ($form->isSubmitted() && $form->isValid()) {
+                    $article = $form->getData();
                     $user = $form->getData();
                     $encoded = $encoder->encodePassword($article, $article->getPassword());
                     $article->setPassword($encoded);
