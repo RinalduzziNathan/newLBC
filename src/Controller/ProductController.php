@@ -97,9 +97,6 @@ class ProductController extends AbstractController
             return $this->redirectToRoute('sendmail', ["email" => $email]);
         }
 
-        $formSearch = $this->createForm(SearchProductFormType::class);
-        $formSearch->handleRequest($request); // On récupère le formulaire envoyé dans la requête
-
         $repository = $em->getRepository(Product::class);
         $product = $repository->find($productId);
         if($product==null){
@@ -113,6 +110,16 @@ class ProductController extends AbstractController
         }
         if(!$user) {
             throw $this->createNotFoundException('Sorry, there is no user attach to this product');
+        }
+        $formSearch = $this->createForm(SearchProductFormType::class);
+        $formSearch->handleRequest($request); // On récupère le formulaire envoyé dans la requête
+
+        if ($formSearch->isSubmitted() && $formSearch->isValid()) { // on véfifie si le formulaire est envoyé et si il est valide
+            $repository = $em->getRepository(Product::class);
+            $article = $formSearch->getData(); // On récupère l'article associé
+            $name = $article["recherche"];
+            $names = $repository->findByName($name);
+            return $this->render('product/recherche.html.twig', ['formSearch' => $formSearch->createView(), 'formMail' => $formMail->createView(), 'result'=>$names]); // Hop redirigé et on sort du controller
         }
         return $this->render('product/productDetails.html.twig', [
             "product" => $product,
