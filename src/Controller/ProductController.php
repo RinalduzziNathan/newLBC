@@ -84,6 +84,7 @@ class ProductController extends AbstractController
         }
         $repository = $em->getRepository(Product::class);
         $products = $repository->findByCategory($category);
+        dd($products);
         if(!$products) {
             throw $this->createNotFoundException('Sorry, there is no product');
         }
@@ -104,7 +105,7 @@ class ProductController extends AbstractController
 
         return $this->render('product/categories.html.twig', [
             'formSearch' => $formSearch->createView(),
-            "products" => $products,
+            'products' => $products,
             'formMail' => $formMail->createView()
         ]);
     }

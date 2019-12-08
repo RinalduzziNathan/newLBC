@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\UserImage;
 use App\Entity\UserLogin;
+use App\Form\SearchProductFormType;
 use App\Form\SendMailFormType;
 use App\Form\UserLoginFormType;
 use App\Form\UpdateUserFormType;
@@ -37,14 +38,17 @@ class AuthCustomController extends AbstractController
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
+        $formSearch = $this->createForm(SearchProductFormType::class);
+        $formSearch->handleRequest($request); // On récupère le formulaire envoyé dans la requête
+
         $formMail = $this->createForm(SendMailFormType::class);
         $formMail->handleRequest($request);
         if ($formMail->isSubmitted() && $formMail->isValid()) {
             $email = $formMail->getData()['email'];
             return $this->redirectToRoute('sendmail', ["email" => $email]);
         }
-        return $this->render('security/login.html.twig', ['last_username' => $lastUsername,'formMail' => $formMail->createView(), 'error' => $error]);
-        //return new RedirectResponse($this->urlGenerator->generate('/login'));
+        return $this->render('security/login.html.twig', ['last_username' => $lastUsername,'formMail' => $formMail->createView(), 'error' => $error, 'formSearch' => $formSearch->createView()]);
+        //        //return new RedirectResponse($this->urlGenerator->generate('/login'));
     }
     /**
      * @Route("/register", name="register")
@@ -55,6 +59,9 @@ class AuthCustomController extends AbstractController
         $image = new UserImage();
         $form = $this->createForm(UserLoginFormType::class,$user);
         $form->handleRequest($request); // On récupère le formulaire envoyé dans la requête
+
+        $formSearch = $this->createForm(SearchProductFormType::class);
+        $formSearch->handleRequest($request); // On récupère le formulaire envoyé dans la requête
 
         $formMail = $this->createForm(SendMailFormType::class);
         $formMail->handleRequest($request);
@@ -103,7 +110,7 @@ class AuthCustomController extends AbstractController
             $em->flush(); // on save
             return $this->redirectToRoute('sendmail', ['email' => $user->getEmail()]);
         }
-        return $this->render('security/register.html.twig', ['form' => $form->createView(),'formMail' => $formMail->createView()]); // Hop redirigé et on sort du controller
+        return $this->render('security/register.html.twig', ['form' => $form->createView(),'formMail' => $formMail->createView(), 'formSearch' => $formSearch->createView()]); // Hop redirigé et on sort du controller
     }
 
     /**
@@ -117,6 +124,9 @@ class AuthCustomController extends AbstractController
             $email = $formMail->getData()['email'];
             return $this->redirectToRoute('sendmail', ["email" => $email]);
         }
+
+        $formSearch = $this->createForm(SearchProductFormType::class);
+        $formSearch->handleRequest($request); // On récupère le formulaire envoyé dans la requête
 
         if ($this->getUser() != null)
         {
@@ -148,7 +158,7 @@ class AuthCustomController extends AbstractController
                     $em->flush(); // on save
                     return $this->redirectToRoute('index');
                 }
-                return $this->render('security/updateuser.html.twig', ['form' => $form->createView(),'formMail' => $formMail->createView()]); // Hop redirigé et on sort du controller
+                return $this->render('security/updateuser.html.twig', ['form' => $form->createView(),'formMail' => $formMail->createView(), 'formSearch' => $formSearch->createView()]); // Hop redirigé et on sort du controller
             }
         }
         else {
@@ -173,6 +183,9 @@ class AuthCustomController extends AbstractController
      */
     public function UserInfo(EntityManagerInterface $em, Request $request, $id)
     {
+        $formSearch = $this->createForm(SearchProductFormType::class);
+        $formSearch->handleRequest($request); // On récupère le formulaire envoyé dans la requête
+
         $formMail = $this->createForm(SendMailFormType::class);
         $formMail->handleRequest($request);
         if ($formMail->isSubmitted() && $formMail->isValid()) {
@@ -187,7 +200,8 @@ class AuthCustomController extends AbstractController
         }
         return $this->render('security/profile.html.twig', [
             "user" => $user,
-            'formMail' => $formMail->createView()
+            'formMail' => $formMail->createView(),
+            'formSearch' => $formSearch->createView()
         ]);
     }
 }
