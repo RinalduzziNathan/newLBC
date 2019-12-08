@@ -69,6 +69,9 @@ class ProductController extends AbstractController
 
         $repository = $em->getRepository(Product::class);
         $product = $repository->find($productId);
+        if($product==null){
+            return $this->redirectToRoute('index'); 
+        }
         $repository = $em->getRepository(UserLogin::class);
         $userid = $product->getUser()->getId();
         $user = $repository->find($userid);
@@ -169,6 +172,7 @@ class ProductController extends AbstractController
             $em->remove($product); 
             $em->flush();
         }
+
         return $this->redirectToRoute('index'); 
 
     }

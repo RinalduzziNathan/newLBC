@@ -154,6 +154,9 @@ class AuthCustomController extends AbstractController
         else {
             return $this->redirectToRoute("index");
         }
+        
+        return $this->redirectToRoute('index'); 
+        
     }
 
 
