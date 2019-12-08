@@ -50,7 +50,25 @@ class ProductController extends AbstractController
             'formMail' => $formMail->createView()
         ]);
     }
-
+    /**
+     * @Route("/deleteproduct/{productid}", name="deleteproduct")
+     */
+    public function DeleteProduct(Request $request, EntityManagerInterface $em, Security $security, $productid)
+    {
+        if( !$security->isGranted('IS_AUTHENTICATED_FULLY') ){
+            return $this->redirectToRoute('app_login');
+        }
+        $product = $em->getRepository(Product::class)->find($productid);
+        if($product==null){
+            return $this->redirectToRoute('index'); 
+        }
+        
+        if($this->getUser() == $product->getUser()) {
+            $em->remove($product); 
+            $em->flush();
+        }
+        return $this->redirectToRoute('index'); 
+    }
     /**
      * @Route("/product/{productId}",name="productDetails")
      **/
@@ -67,6 +85,9 @@ class ProductController extends AbstractController
 
         $repository = $em->getRepository(Product::class);
         $product = $repository->find($productId);
+        if($product==null){
+            return $this->redirectToRoute('index'); 
+        }
         $repository = $em->getRepository(UserLogin::class);
         $userid = $product->getUser()->getId();
         $user = $repository->find($userid);
@@ -254,8 +275,8 @@ class ProductController extends AbstractController
     public function RestApi($category,$productname,EntityManagerInterface $em){
       
          $repository = $em->getRepository(Product::class);
-         //$product = $repository->findByNameAndCategory($productname, "immobilier");
-         $product = $repository->find(9);
+         $product = $repository->findByNameAndCategory($productname, "immobilier");
+    
         $encoder = new JsonEncoder();
         $defaultContext = [
             AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
