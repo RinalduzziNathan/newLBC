@@ -42,9 +42,6 @@ class ProductController extends AbstractController
         }
         $repository = $em->getRepository(Product::class);
         $products = $repository->findAll();
-        if(!$products) {
-            throw $this->createNotFoundException('Sorry, there is no product');
-        }
 
         $formSearch = $this->createForm(SearchProductFormType::class);
         $formSearch->handleRequest($request); // On récupère le formulaire envoyé dans la requête
@@ -54,9 +51,6 @@ class ProductController extends AbstractController
             $article = $formSearch->getData(); // On récupère l'article associé
             $name = $article["recherche"];
             $names = $repository->findByName($name);
-            if(!$names) {
-                throw $this->createNotFoundException('Sorry, there is no product with this name');
-            }
             return $this->render('product/recherche.html.twig', ['formSearch' => $formSearch->createView(), 'formMail' => $formMail->createView(), 'result'=>$names]); // Hop redirigé et on sort du controller
         }
 
@@ -84,10 +78,6 @@ class ProductController extends AbstractController
         }
         $repository = $em->getRepository(Product::class);
         $products = $repository->findByCategory($category);
-        dd($products);
-        if(!$products) {
-            throw $this->createNotFoundException('Sorry, there is no product');
-        }
 
         $formSearch = $this->createForm(SearchProductFormType::class);
         $formSearch->handleRequest($request); // On récupère le formulaire envoyé dans la requête
@@ -97,9 +87,7 @@ class ProductController extends AbstractController
             $article = $formSearch->getData(); // On récupère l'article associé
             $name = $article["recherche"];
             $names = $repository->findByName($name);
-            if(!$names) {
-                throw $this->createNotFoundException('Sorry, there is no product with this name');
-            }
+
             return $this->render('product/recherche.html.twig', ['formSearch' => $formSearch->createView(), 'formMail' => $formMail->createView(), 'result'=>$names]); // Hop redirigé et on sort du controller
         }
 
@@ -328,9 +316,6 @@ class ProductController extends AbstractController
             $article = $formSearch->getData(); // On récupère l'article associé
             $name = $article["recherche"];
             $names = $repository->findByNameAndCategory($name, $category);
-            if(!$names) {
-                throw $this->createNotFoundException('Sorry, there is no product with this name');
-            }
             return $this->render('recherche.html.twig', ['formSearch' => $formSearch->createView(), 'formMail' => $formMail->createView(), 'result'=>$names]); // Hop redirigé et on sort du controller
         }
         return $this->render('recherche.html.twig', ['formSearch' => $formSearch->createView(), 'formMail' => $formMail->createView()]); // on envoie ensuite le formulaire au template

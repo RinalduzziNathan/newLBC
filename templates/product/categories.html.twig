@@ -147,6 +147,9 @@
             </div>-->
 
             <div class="row sortable-container">
+                {% if products == null %}
+                    <center><h2>Désolé mais il n'y pas de produit pour l'instant</h2></center>
+                {% endif %}
                 {% for product in products %}
                     <!-- Single Product Area -->
                     <div class="col-12 col-sm-6 col-md-12 col-xl-6 sortable-item furniture" >
