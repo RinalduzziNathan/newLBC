@@ -212,9 +212,6 @@ class ProductController extends AbstractController
             $article = $formSearch->getData(); // On récupère l'article associé
             $name = $article["recherche"];
             $names = $repository->findByName($name);
-            if(!$names) {
-                throw $this->createNotFoundException('Sorry, there is no product with this name');
-            }
             return $this->render('recherche.html.twig', ['formSearch' => $formSearch->createView(), 'formMail' => $formMail->createView(), 'result'=>$names]); // Hop redirigé et on sort du controller
         }
 
