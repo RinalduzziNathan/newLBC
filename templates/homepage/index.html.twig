@@ -4,9 +4,14 @@
         <!-- Product Catagories Area Start -->
 
         <div class="products-catagories-area clearfix">
-            <div class="amado-pro-catagory clearfix">
+            < class="amado-pro-catagory clearfix">
                 {% if products == null %}
-                    <h3 class="breadcrumb-item active">Désolé mais il n'y pas de produit pour l'instant</h3>
+                    <div class="col-12 col-sm-6 col-md-12 col-xl-6 sortable-item furniture" >
+                        <div class="single-product-wrapper">
+                            <h3 class="breadcrumb-item active">Désolé mais il n'y pas de produit pour l'instant</h3>
+                            <div class="product-img"><img src="{{ asset('img/travolta.gif') }}"></div>
+                        </div>
+                    </div>
                 {% endif %}
                 {% for product in products %}
                     <!-- Single Catagory -->

@@ -23,7 +23,12 @@
                         </div>
                     {% endfor %}
                 {% else %}
-                    <h3 class="breadcrumb-item active">Désolé aucun produit ne correspond à votre recherche...</h3>
+                    <div class="col-12 col-sm-6 col-md-12 col-xl-6 sortable-item furniture" >
+                        <div class="single-product-wrapper">
+                            <h3 class="breadcrumb-item active">Désolé aucun produit ne correspond à votre recherche...</h3>
+                            <div class="product-img"><img src="{{ asset('img/travolta.gif') }}"></div>
+                        </div>
+                    </div>
                 {% endif %}
             {% endif %}
         </div>
