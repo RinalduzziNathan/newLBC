@@ -28,7 +28,7 @@ class ProductController extends AbstractController
     /**
      * @Route("/shop",name="shop")
      **/
-    public function categories(EntityManagerInterface $em, Request $request) {
+    public function categorie(EntityManagerInterface $em, Request $request) {
         $formMail = $this->createForm(SendMailFormType::class);
         $formMail->handleRequest($request);
         if ($formMail->isSubmitted() && $formMail->isValid()) {
@@ -60,6 +60,47 @@ class ProductController extends AbstractController
             return $this->render('product/recherche.html.twig', ['formSearch' => $formSearch->createView(), 'formMail' => $formMail->createView(), 'result'=>$names]); // Hop redirigé et on sort du controller
         }
 
+        return $this->render('product/categories.html.twig', [
+            'formSearch' => $formSearch->createView(),
+            "products" => $products,
+            'formMail' => $formMail->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/shop/{category}",name="shopcategory")
+     **/
+    public function ShopByCategory(EntityManagerInterface $em, Request $request, $category) {
+        $formMail = $this->createForm(SendMailFormType::class);
+        $formMail->handleRequest($request);
+        if ($formMail->isSubmitted() && $formMail->isValid()) {
+            $email = $formMail->getData()['email'];
+            return $this->redirectToRoute('sendmail', ["email" => $email]);
+        }
+
+        $securityContext = $this->container->get('security.authorization_checker');
+        if ($securityContext->isGranted('IS_AUTHENTICATED_ANONYMOUSLY ')) {
+            dd("connecetd");
+        }
+        $repository = $em->getRepository(Product::class);
+        $products = $repository->findByCategory($category);
+        if(!$products) {
+            throw $this->createNotFoundException('Sorry, there is no product');
+        }
+
+        $formSearch = $this->createForm(SearchProductFormType::class);
+        $formSearch->handleRequest($request); // On récupère le formulaire envoyé dans la requête
+
+        if ($formSearch->isSubmitted() && $formSearch->isValid()) { // on véfifie si le formulaire est envoyé et si il est valide
+            $repository = $em->getRepository(Product::class);
+            $article = $formSearch->getData(); // On récupère l'article associé
+            $name = $article["recherche"];
+            $names = $repository->findByName($name);
+            if(!$names) {
+                throw $this->createNotFoundException('Sorry, there is no product with this name');
+            }
+            return $this->render('product/recherche.html.twig', ['formSearch' => $formSearch->createView(), 'formMail' => $formMail->createView(), 'result'=>$names]); // Hop redirigé et on sort du controller
+        }
 
         return $this->render('product/categories.html.twig', [
             'formSearch' => $formSearch->createView(),
@@ -67,6 +108,7 @@ class ProductController extends AbstractController
             'formMail' => $formMail->createView()
         ]);
     }
+
     /**
      * @Route("/deleteproduct/{productid}", name="deleteproduct")
      */
