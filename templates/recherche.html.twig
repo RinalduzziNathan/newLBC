@@ -4,7 +4,11 @@
 {{ form_end(formSearch) }}
 
 {% if result is defined %}
-    {% for product in result %}
-        {{ product.getName() }}
-    {% endfor %}
+    {% if result != null %}
+        {% for product in result %}
+            {{ product.getName() }}
+        {% endfor %}
+    {% else %}
+        <h1>Désolé aucun produit ne correspond à votre recherche...</h1>
+    {% endif %}
 {% endif %}
