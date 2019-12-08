@@ -2,7 +2,7 @@
 
 {% block Content %}
     <div class="products-catagories-area clearfix">
-        <h1><u>Les annonces trouvées:</u></h1>
+        <h1>Les annonces trouvées:</h1>
         <div class="amado-pro-catagory clearfix">
             {{form_start(formSearch)}}
             {{ form_end(formSearch) }}
@@ -23,7 +23,7 @@
                         </div>
                     {% endfor %}
                 {% else %}
-                    <h1>Désolé aucun produit ne correspond à votre recherche...</h1>
+                    <h3 class="breadcrumb-item active">Désolé aucun produit ne correspond à votre recherche...</h3>
                 {% endif %}
             {% endif %}
         </div>
