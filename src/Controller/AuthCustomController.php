@@ -207,7 +207,7 @@ class AuthCustomController extends AbstractController
     }
 
     /**
-     * @Route("/profile/{id}", name="profile", methods={"GET"})
+     * @Route("/profile/{id}", name="profile")
      */
     public function UserInfo(EntityManagerInterface $em, Request $request, $id)
     {

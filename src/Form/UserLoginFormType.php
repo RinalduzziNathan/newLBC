@@ -67,7 +67,10 @@ class UserLoginFormType extends AbstractType
                 'label' => false,
                 'required' => false,])
             ->add('userImage',ImportImageUserFormType::class)
-            ->add('Enregister',SubmitType::class)
+            ->add('submit',SubmitType::class,[
+                'attr'=> ['class'=> 'btn amado-btn w-100'],
+                'label'=> "S'enregistrer"
+            ]);
         ;
     }
 

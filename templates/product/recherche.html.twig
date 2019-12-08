@@ -1,17 +1,31 @@
 {% extends 'base.html.twig' %}
 
 {% block Content %}
-    <h1>VOICI LA PAGE DE TESTE</h1>
-    {{form_start(formSearch)}}
-    {{ form_end(formSearch) }}
-
-    {% if result is defined %}
-        {% if result != null %}
-            {% for product in result %}
-                {{ product.getName() }}
-            {% endfor %}
-        {% else %}
-            <h1>Désolé aucun produit ne correspond à votre recherche...</h1>
-        {% endif %}
-    {% endif %}
+    <div class="products-catagories-area clearfix">
+        <h1><u>Les annonces trouvées:</u></h1>
+        <div class="amado-pro-catagory clearfix">
+            {{form_start(formSearch)}}
+            {{ form_end(formSearch) }}
+            {% if result is defined %}
+                {% if result != null %}
+                    {% for product in result %}
+                        <!-- Single Catagory -->
+                        <div class="single-products-catagory clearfix">
+                            <a href="{{ path('productDetails', {productId: product.id }) }}">
+                                <img src="{{ asset('uploads/'~product.getProductImages()[0].filename) }}" alt="">
+                                <!-- Hover Content -->
+                                <div class="hover-content">
+                                    <div class="line"></div>
+                                    <p>Prix {{ product.getPrice() }}€</p>
+                                    <h4>{{ product.getName() }}</h4>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <h1>Désolé aucun produit ne correspond à votre recherche...</h1>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}

@@ -64,7 +64,10 @@ class UpdateUserFormType extends AbstractType
                 'attr' =>['class'=> 'form-control w-100',"placeholder"=>$options['description'], "cols"=>"30", "rows"=>"10"],
                 'label' => false,
                 'required' => false,])
-            ->add('Editer',SubmitType::class)
+            ->add('submit',SubmitType::class,[
+                'attr'=> ['class'=> 'btn amado-btn w-100'],
+                'label'=> "Editer"
+            ]);
         ;
     }
 
