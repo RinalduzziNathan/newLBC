@@ -9,23 +9,18 @@ use App\Form\CreateProductFormType;
 use App\Form\SearchProductFormType;
 use App\Form\SendMailFormType;
 use App\Form\UpdateProductFormType;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Routing\Annotation\Route;
-
 use Symfony\Component\HttpFoundation\JsonResponse;
-
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpClient\HttpClient;
 
 class ProductController extends AbstractController
 {
@@ -69,9 +64,6 @@ class ProductController extends AbstractController
 
         $repository = $em->getRepository(Product::class);
         $product = $repository->find($productId);
-        if($product==null){
-            return $this->redirectToRoute('index'); 
-        }
         $repository = $em->getRepository(UserLogin::class);
         $userid = $product->getUser()->getId();
         $user = $repository->find($userid);
@@ -154,28 +146,7 @@ class ProductController extends AbstractController
 
         return $this->render('product/publishproduct.html.twig', ['form' => $form->createView(),'formMail' => $formMail->createView()]); // on envoie ensuite le formulaire au template
     }
-     /**
-     * @Route("/deleteproduct/{productid}", name="deleteproduct")
-     */
-    public function DeleteProduct(Request $request, EntityManagerInterface $em, Security $security, $productid)
-    {
-        if( !$security->isGranted('IS_AUTHENTICATED_FULLY') ){
-            return $this->redirectToRoute('app_login');
-        }
 
-        $product = $em->getRepository(Product::class)->find($productid);
-        if($product==null){
-            return $this->redirectToRoute('index'); 
-        }
-        
-        if($this->getUser() == $product->getUser()) {
-            $em->remove($product); 
-            $em->flush();
-        }
-
-        return $this->redirectToRoute('index'); 
-
-    }
     /**
      * @Route("/editproduct/{productid}", name="editproduct")
      */
@@ -194,9 +165,6 @@ class ProductController extends AbstractController
 
         $product = new Product();
         $product = $em->getRepository(Product::class)->find($productid);
-        if($product==null){
-            return $this->redirectToRoute('index'); 
-        }
         if($this->getUser() == $product->getUser()) {
             $form = $this->createForm(UpdateProductFormType::class, $product, [
                 'name' => $product->getName(),
@@ -236,19 +204,21 @@ class ProductController extends AbstractController
             return $this->redirectToRoute('sendmail', ["email" => $email]);
         }
 
-        $form = $this->createForm(SearchProductFormType::class);
-        $form->handleRequest($request); // On récupère le formulaire envoyé dans la requête
-        if ($form->isSubmitted() && $form->isValid()) { // on véfifie si le formulaire est envoyé et si il est valide
+        $formSearch = $this->createForm(SearchProductFormType::class);
+        $formSearch->handleRequest($request); // On récupère le formulaire envoyé dans la requête
+
+        if ($formSearch->isSubmitted() && $formSearch->isValid()) { // on véfifie si le formulaire est envoyé et si il est valide
             $repository = $em->getRepository(Product::class);
-            $article = $form->getData(); // On récupère l'article associé
+            $article = $formSearch->getData(); // On récupère l'article associé
             $name = $article["recherche"];
             $names = $repository->findByName($name);
             if(!$names) {
                 throw $this->createNotFoundException('Sorry, there is no product with this name');
             }
-            return $this->render('test.html.twig', ['form' => $form->createView(), 'formMail' => $formMail->createView(), 'result'=>$names]); // Hop redirigé et on sort du controller
+            return $this->render('recherche.html.twig', ['formSearch' => $formSearch->createView(), 'formMail' => $formMail->createView(), 'result'=>$names]); // Hop redirigé et on sort du controller
         }
-        return $this->render('test.html.twig', ['form' => $form->createView(), 'formMail' => $formMail->createView()]); // on envoie ensuite le formulaire au template
+
+        return $this->render('recherche.html.twig', ['formSearch' => $formSearch->createView(), 'formMail' => $formMail->createView()]); // on envoie ensuite le formulaire au template
     }
     /**
      * @Route("/searchproductbycategory/{category}", name="searchproductbycategory")
@@ -262,32 +232,34 @@ class ProductController extends AbstractController
             return $this->redirectToRoute('sendmail', ["email" => $email]);
         }
 
-        $form = $this->createForm(SearchProductFormType::class);
-        $form->handleRequest($request); // On récupère le formulaire envoyé dans la requête
-        if ($form->isSubmitted() && $form->isValid()) { // on véfifie si le formulaire est envoyé et si il est valide
+        $formSearch = $this->createForm(SearchProductFormType::class);
+        $formSearch->handleRequest($request); // On récupère le formulaire envoyé dans la requête
+        if ($formSearch->isSubmitted() && $formSearch->isValid()) { // on véfifie si le formulaire est envoyé et si il est valide
             $repository = $em->getRepository(Product::class);
-            $article = $form->getData(); // On récupère l'article associé
+            $article = $formSearch->getData(); // On récupère l'article associé
             $name = $article["recherche"];
             $names = $repository->findByNameAndCategory($name, $category);
             if(!$names) {
                 throw $this->createNotFoundException('Sorry, there is no product with this name');
             }
-            return $this->render('test.html.twig', ['form' => $form->createView(), 'formMail' => $formMail->createView(), 'result'=>$names]); // Hop redirigé et on sort du controller
+            return $this->render('recherche.html.twig', ['formSearch' => $formSearch->createView(), 'formMail' => $formMail->createView(), 'result'=>$names]); // Hop redirigé et on sort du controller
         }
-        return $this->render('test.html.twig', ['form' => $form->createView(), 'formMail' => $formMail->createView()]); // on envoie ensuite le formulaire au template
+        return $this->render('recherche.html.twig', ['formSearch' => $formSearch->createView(), 'formMail' => $formMail->createView()]); // on envoie ensuite le formulaire au template
     }
 
      /**
-     * @Route("v1/product/{category}/{productname}")
-     */
-    public function RestApi($category,$productname,EntityManagerInterface $em){
-        $Arr=["qsdmndqm","zinzolin","fai","vg"];
+     * @Route("/product/immobilier/{productname}")
 
-        $repository = $em->getRepository(Product::class);
-        $product = $repository->findByNameAndCategory($productname, $category);
-  
-         
-        //$product = $repository->find(9);
+     */
+    public function GetMeubleName($productname,EntityManagerInterface $em){
+         $Array = [
+            1=>["tête","pied","jambe","rein"],
+            2=>"jaaaaj",
+            3=>"foo()"
+        ];
+         $repository = $em->getRepository(Product::class);
+         //$product = $repository->findByNameAndCategory($productname, "immobilier");
+         $product = $repository->find(9);
         $encoder = new JsonEncoder();
         $defaultContext = [
             AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
@@ -296,23 +268,6 @@ class ProductController extends AbstractController
         ];
         $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
         $serializer = new Serializer([$normalizer], [$encoder]);
-        //dd($product);
-       // return new JsonResponse($serializer->serialize($product, 'json'));
-        
-        return new JsonResponse($Arr);
+        return new JsonResponse($serializer->serialize($product, 'json'));
     }
-
-      /**
-     * @Route("test")
-     */
-    public function test(){
-     $client = HttpClient::create();
-     $response = $client->request('GET',"http://localhost:8000/v1/product/immobilier/z");
-//'https://api.themoviedb.org/3/movie/5?api_key=cbe364327a49b1c86ffcc7c688737058&language=fr'
-     
-    }
-
-
-
-
 }
