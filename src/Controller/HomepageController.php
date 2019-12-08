@@ -49,8 +49,9 @@ class HomepageController extends AbstractController
     {
         $converter = new CssToInlineStyles();
         $css = file_get_contents('../public/css/core-style.css');
-        echo $converter->convert($css);
+        $converter->convert($css);
         $mailer->registerPlugin(new CssInlinerPlugin($converter));
+
         $repository = $em->getRepository(Product::class);
         $products = $repository->findallWithLimit(6);
         $message = (new \Swift_Message('Hello Email'))
