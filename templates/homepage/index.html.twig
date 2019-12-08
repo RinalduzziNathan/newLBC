@@ -5,20 +5,23 @@
 
         <div class="products-catagories-area clearfix">
             <div class="amado-pro-catagory clearfix">
-                    {% for product in products %}
-                        <!-- Single Catagory -->
-                        <div class="single-products-catagory clearfix">
-                            <a href="{{ path('productDetails', {productId: product.id }) }}">
-                                <img src="{{ asset('uploads/'~product.getProductImages()[0].filename) }}" alt="">
-                                <!-- Hover Content -->
-                                <div class="hover-content">
-                                    <div class="line"></div>
-                                    <p>Prix {{ product.getPrice() }}€</p>
-                                    <h4>{{ product.getName() }}</h4>
-                                </div>
-                            </a>
-                        </div>
-                    {% endfor %}
+                {% if products == null %}
+                    <center><h2>Désolé mais il n'y pas de produit pour l'instant</h2></center>
+                {% endif %}
+                {% for product in products %}
+                    <!-- Single Catagory -->
+                    <div class="single-products-catagory clearfix">
+                        <a href="{{ path('productDetails', {productId: product.id }) }}">
+                            <img src="{{ asset('uploads/'~product.getProductImages()[0].filename) }}" alt="">
+                            <!-- Hover Content -->
+                            <div class="hover-content">
+                                <div class="line"></div>
+                                <p>Prix {{ product.getPrice() }}€</p>
+                                <h4>{{ product.getName() }}</h4>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
             </div>
         </div>
 
