@@ -32,14 +32,16 @@
         <div class="container">
             <div class="row">
                 <div class="col-12">
+                    {{form_start(formSearch)}}
+                    {{form_widget(formSearch.recherche)}}
+
+                    {{form_widget(formSearch.submit)}}
+                    {{form_end(formSearch)}}
+                    <!--
                     <div class="search-content">
 
-                            {{form_start(formSearch)}}
-                            {{form_widget(formSearch.recherche)}}
 
-                           {{form_widget(formSearch.submit)}}
-                            {{form_end(formSearch)}}
-                            <!--<form action="#" method="get">
+                            <form action="#" method="get">
                             <input type="search" name="search" id="search" placeholder="Type your keyword...">
                             <button type="submit"><img src="{{ asset('img/core-img/search.png') }}" alt="search"></button>
                         </form>-->
