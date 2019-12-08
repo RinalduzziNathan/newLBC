@@ -62,6 +62,9 @@ class ProductController extends AbstractController
             return $this->redirectToRoute('sendmail', ["email" => $email]);
         }
 
+        $formSearch = $this->createForm(SearchProductFormType::class);
+        $formSearch->handleRequest($request); // On récupère le formulaire envoyé dans la requête
+
         $repository = $em->getRepository(Product::class);
         $product = $repository->find($productId);
         $repository = $em->getRepository(UserLogin::class);
@@ -76,7 +79,8 @@ class ProductController extends AbstractController
         return $this->render('product/productDetails.html.twig', [
             "product" => $product,
             "user" => $user,
-            'formMail' => $formMail->createView()
+            'formMail' => $formMail->createView(),
+            'formSearch' => $formSearch->createView()
         ]);
     }
 
