@@ -45,7 +45,24 @@ class ProductController extends AbstractController
         if(!$products) {
             throw $this->createNotFoundException('Sorry, there is no product');
         }
+
+        $formSearch = $this->createForm(SearchProductFormType::class);
+        $formSearch->handleRequest($request); // On récupère le formulaire envoyé dans la requête
+
+        if ($formSearch->isSubmitted() && $formSearch->isValid()) { // on véfifie si le formulaire est envoyé et si il est valide
+            $repository = $em->getRepository(Product::class);
+            $article = $formSearch->getData(); // On récupère l'article associé
+            $name = $article["recherche"];
+            $names = $repository->findByName($name);
+            if(!$names) {
+                throw $this->createNotFoundException('Sorry, there is no product with this name');
+            }
+            return $this->render('product/recherche.html.twig', ['formSearch' => $formSearch->createView(), 'formMail' => $formMail->createView(), 'result'=>$names]); // Hop redirigé et on sort du controller
+        }
+
+
         return $this->render('product/categories.html.twig', [
+            'formSearch' => $formSearch->createView(),
             "products" => $products,
             'formMail' => $formMail->createView()
         ]);

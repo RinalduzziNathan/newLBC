@@ -49,7 +49,7 @@ class HomepageController extends AbstractController
             if(!$names) {
                 throw $this->createNotFoundException('Sorry, there is no product with this name');
             }
-            return $this->render('recherche.html.twig', ['formSearch' => $formSearch->createView(), 'formMail' => $formMail->createView(), 'result'=>$names]); // Hop redirigé et on sort du controller
+            return $this->render('product/recherche.html.twig', ['formSearch' => $formSearch->createView(), 'formMail' => $formMail->createView(), 'result'=>$names]); // Hop redirigé et on sort du controller
         }
             return $this->render('homepage/index.html.twig', [
                 'formSearch' => $formSearch->createView(),"products" => $products, 'formMail' => $formMail->createView()
