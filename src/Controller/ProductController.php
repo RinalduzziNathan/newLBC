@@ -176,6 +176,17 @@ class ProductController extends AbstractController
             return $this->redirectToRoute('sendmail', ["email" => $email]);
         }
 
+        $formSearch = $this->createForm(SearchProductFormType::class);
+        $formSearch->handleRequest($request);
+
+        if ($formSearch->isSubmitted() && $formSearch->isValid()) {
+            $repository = $em->getRepository(Product::class);
+            $article = $formSearch->getData(); // On récupère l'article associé
+            $name = $article["recherche"];
+            $names = $repository->findByName($name);
+            return $this->render('product/recherche.html.twig', ['formSearch' => $formSearch->createView(), 'formMail' => $formMail->createView(), 'result'=>$names]); // Hop redirigé et on sort du controller
+        }
+
         $product = new Product();
         $form = $this->createForm(CreateProductFormType::class,$product);
         $form->handleRequest($request); // On récupère le formulaire envoyé dans la requête
@@ -224,7 +235,7 @@ class ProductController extends AbstractController
             return $this->redirectToRoute('index'); // Hop redirigé et on sort du controller
         }
 
-        return $this->render('product/publishproduct.html.twig', ['form' => $form->createView(),'formMail' => $formMail->createView()]); // on envoie ensuite le formulaire au template
+        return $this->render('product/publishproduct.html.twig', ['form' => $form->createView(),'formMail' => $formMail->createView(),'formSearch' => $formSearch->createView()]); // on envoie ensuite le formulaire au template
     }
 
     /**
@@ -242,7 +253,16 @@ class ProductController extends AbstractController
             $email = $formMail->getData()['email'];
             return $this->redirectToRoute('sendmail', ["email" => $email]);
         }
+        $formSearch = $this->createForm(SearchProductFormType::class);
+        $formSearch->handleRequest($request);
 
+        if ($formSearch->isSubmitted() && $formSearch->isValid()) {
+            $repository = $em->getRepository(Product::class);
+            $article = $formSearch->getData(); // On récupère l'article associé
+            $name = $article["recherche"];
+            $names = $repository->findByName($name);
+            return $this->render('product/recherche.html.twig', ['formSearch' => $formSearch->createView(), 'formMail' => $formMail->createView(), 'result'=>$names]); // Hop redirigé et on sort du controller
+        }
         $product = new Product();
         $product = $em->getRepository(Product::class)->find($productid);
         if($this->getUser() == $product->getUser()) {
@@ -265,7 +285,7 @@ class ProductController extends AbstractController
 
                 return $this->redirectToRoute('index'); // Hop redirigé et on sort du controller
             }
-            return $this->render('product/updateproduct.html.twig', ['form' => $form->createView(), 'formMail' => $formMail->createView()]); // on envoie ensuite le formulaire au template
+            return $this->render('product/updateproduct.html.twig', ['form' => $form->createView(), 'formMail' => $formMail->createView(),'formSearch' => $formSearch->createView()]); // on envoie ensuite le formulaire au template
         }
         else {
             return $this->redirectToRoute("index");
@@ -327,7 +347,7 @@ class ProductController extends AbstractController
     public function RestApi($category,$productname,EntityManagerInterface $em){
       
          $repository = $em->getRepository(Product::class);
-         $product = $repository->findByNameAndCategory($productname, "immobilier");
+         $product = $repository->findByNameAndCategory($productname, $category);
     
         $encoder = new JsonEncoder();
         $defaultContext = [
@@ -337,7 +357,6 @@ class ProductController extends AbstractController
         ];
         $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
         $serializer = new Serializer([$normalizer], [$encoder]);
-        //dd($product);
         return new JsonResponse($serializer->serialize($product, 'json'));
         
     }
@@ -349,6 +368,5 @@ class ProductController extends AbstractController
         $client = HttpClient::create();
         $response = $client->request('GET',"http://localhost:8000/v1/product/immobilier/z");
     //'https://api.themoviedb.org/3/movie/5?api_key=cbe364327a49b1c86ffcc7c688737058&language=fr'
-     
     }
 }

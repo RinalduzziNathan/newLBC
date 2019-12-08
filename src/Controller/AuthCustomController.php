@@ -211,8 +211,6 @@ class AuthCustomController extends AbstractController
      */
     public function UserInfo(EntityManagerInterface $em, Request $request, $id)
     {
-
-
         $formMail = $this->createForm(SendMailFormType::class);
         $formMail->handleRequest($request);
         if ($formMail->isSubmitted() && $formMail->isValid()) {
@@ -229,7 +227,7 @@ class AuthCustomController extends AbstractController
             $names = $repository->findByName($name);
             return $this->render('product/recherche.html.twig', ['formSearch' => $formSearch->createView(), 'formMail' => $formMail->createView(), 'result'=>$names]); // Hop redirigé et on sort du controller
         }
-        
+
         $repository = $em->getRepository(UserLogin::class);
         $user = $repository->find($id);
         if(!$user) {
