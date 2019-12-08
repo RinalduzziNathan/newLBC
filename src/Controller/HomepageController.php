@@ -9,6 +9,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Openbuildings\Swiftmailer\CssInlinerPlugin;
+use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
 
 class HomepageController extends AbstractController
 {
@@ -45,9 +47,12 @@ class HomepageController extends AbstractController
      */
     public function SendMail(\Swift_Mailer $mailer, $email, EntityManagerInterface $em)
     {
+        $converter = new CssToInlineStyles();
+        $css = file_get_contents('../public/css/core-style.css');
+        echo $converter->convert($css);
+        $mailer->registerPlugin(new CssInlinerPlugin($converter));
         $repository = $em->getRepository(Product::class);
         $products = $repository->findallWithLimit(6);
-
         $message = (new \Swift_Message('Hello Email'))
             ->setFrom('maiscetaitsur@gmail.com')
             ->setTo($email)
@@ -56,7 +61,8 @@ class HomepageController extends AbstractController
                     'email/email.html.twig', [
                     "products" => $products
                 ]),'text/html'
-            )        ->addPart(
+            )
+            ->addPart(
                 $this->renderView(
                 // templates/emails/registration.txt.twig
                     'email/email.html.twig',
