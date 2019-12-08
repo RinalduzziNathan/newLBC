@@ -1,99 +1,102 @@
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="description" content="">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+{% extends 'base.html.twig' %}
+
+{% block LeftBar %}
+    {% block Content %}
+        {% if app.user %}
+            <div align="center"><h1>Merci {{ app.user.getUsername() }} de vous être abonné à notre NewsLettre</h1></div>
+        {% else %}
+            <div align="center"><h1>Merci de vous être abonné à notre NewsLettre</h1></div>
+        {% endif %}
+            <h2 class="breadcrumb-item active">Voici nos derniers produits</h2>
+            <div class="main-content-wrapper d-flex clearfix">
+                <div class="products-catagories-area clearfix">
+                    <div class="amado-pro-catagory clearfix">
+                        {% for product in products %}
+                            <!-- Single Catagory -->
+                            <div class="single-products-catagory clearfix">
+                                <a href="{{ path('productDetails', {productId: product.id }) }}">
+                                    <img src="{{ asset('uploads/'~product.getProductImages()[0].filename) }}" alt="">
+                                    <!-- Hover Content -->
+                                    <div class="hover-content">
+                                        <div class="line"></div>
+                                        <p>Price {{ product.getPrice() }}€</p>
+                                        <h4>{{ product.getName() }}</h4>
+                                    </div>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
 
 
-    <!-- Title  -->
-    <title>{% block title %}LeBonCoinCoin{% endblock %}</title>
 
-    <!-- Favicon  -->
-    {% block icon %}
-        <link rel="icon" href="{{ asset('img/core-img/logosanstexte.png') }}" >
     {% endblock %}
+{% endblock %}
 
-    <!-- Core Style CSS -->
-    {% block stylesheets %}
-        <link rel="stylesheet" href="{{ asset('css/core-style.css') }}" type="text/css">
-
-    {% endblock %}
-
-</head>
-
-<body>
-    {% if user != null %}
-        <div align="center"><h1>Merci {{ user.getFirstname() }} de vous être abonné à notre NewsLettre</h1></div>
-        <h2><u>Voici nos derniers produits:</u></h2>
-        <div class="main-content-wrapper d-flex clearfix">
-            <div class="products-catagories-area clearfix">
-                <div class="amado-pro-catagory clearfix">
-                    {% for product in products %}
-                        <!-- Single Catagory -->
-                        <div class="single-products-catagory clearfix">
-                            <a href="{{ path('productDetails', {productId: product.id }) }}">
-                                <img src="{{ asset('uploads/'~product.getProductImages()[0].filename) }}" alt="">
-                                <!-- Hover Content -->
-                                <div class="hover-content">
-                                    <div class="line"></div>
-                                    <p>Price {{ product.getPrice() }}€</p>
-                                    <h4>{{ product.getName() }}</h4>
-                                </div>
-                            </a>
+{% block Footer %}
+    <footer class="footer_area clearfix">
+        <div class="container">
+            <div class="row align-items-center">
+                <!-- Single Widget Area -->
+                <div class="col-10 col-lg-3">
+                    <div class="single_widget_area">
+                        <!-- Logo -->
+                        <div class="footer-logo mr-50">
+                            <a href="{{  path('index') }}"><img src="{{ asset('img/core-img/logosanstexte.png') }}" alt="Second logo"></a>
                         </div>
-                    {% endfor %}
+                        <!-- Copywrite Text -->
+                        <p class="copywrite">Copyright ©2019 All rights reserved.</br>
+                            Made with <i class="fa fa-heart-o" aria-hidden="true"></i> by Tomper, Natmad and Louis
+                        </p>
+
+                    </div>
+                </div>
+                <!-- Single Widget Area -->
+                <div class="col-12 col-lg-8">
+                    <div class="single_widget_area">
+                        <!-- Footer Menu -->
+                        <div class="footer_menu">
+                            <nav class="navbar navbar-expand-lg justify-content-end">
+                                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#footerNavContent" aria-controls="footerNavContent" aria-expanded="false" aria-label="Toggle navigation"><i class="fa fa-bars"></i></button>
+                                <div class="collapse navbar-collapse" id="footerNavContent">
+                                    <ul class="navbar-nav ml-auto">
+                                        <li class="nav-item active">
+                                            <a class="nav-link" href="{{  path('index') }}">Acceuil</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{{  path('shop') }}">Magasin</a>
+                                        </li>
+                                        {% if app.user %}
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="{{  path('editprofile', {userid: app.user.id }) }}">Editer profil</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="{{  path('publishproduct') }}">Déposer votre annonce</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="{{  path('profile', {id: app.user.id }) }}">Profil</a>
+                                            </li>
+
+                                        {% else %}
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="{{ path('register') }}">S'enregister</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="{{ path('app_login') }}">Se Connecter</a>
+                                            </li>
+                                        {% endif %}
+
+                                    </ul>
+                                </div>
+                            </nav>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <br><br>
-        <h2><u>Pour plus d'information vous pouvez:</u></h2>
-        <div class="amado-btn-group mt-30 mb-100">
-            <a type="button" class="btn amado-btn desactive mb-15" href="{{ path('index') }}">Acceuil</a>
-            <a type="button" class="btn amado-btn desactive mb-15" href="{{ path('shop') }}">Magasin</a>
-            <a type="button" class="btn amado-btn desactive mb-15" href="{{ path('editprofile', {userid: user.id }) }}">Editer profil</a></p>
-            <a type="button" class="btn amado-btn desactive mb-15" href="{{ path('profile', {id: user.id }) }}">Profil</a></p>
-            <a type="button" class="btn amado-btn desactive mb-15" href="{{ path('publishproduct') }}">Déposer votre annonce</a></p><br>
-        </div>
-    {% else %}
-        <div align="center"><h1>Merci de vous être abonné à notre NewsLettre</h1></div>
-        <h2><u>Voici nos derniers produits:</u></h2>
-        <div class="main-content-wrapper d-flex clearfix">
-            <div class="products-catagories-area clearfix">
-                <div class="amado-pro-catagory clearfix">
-                    {% for product in products %}
-                        <!-- Single Catagory -->
-                        <div class="single-products-catagory clearfix">
-                            <a href="{{ path('productDetails', {productId: product.id }) }}">
-                                <img src="{{ asset('uploads/'~product.getProductImages()[0].filename) }}" alt="">
-                                <!-- Hover Content -->
-                                <div class="hover-content">
-                                    <div class="line"></div>
-                                    <p>Price {{ product.getPrice() }}€</p>
-                                    <h4>{{ product.getName() }}</h4>
-                                </div>
-                            </a>
-                        </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-        <br><br>
-        <h2><u>Pour plus d'information vous pouvez:</u></h2>
-        <div class="amado-btn-group mt-30 mb-100">
-            <a type="button" class="btn amado-btn desactive mb-15" href="{{ path('index') }}">Acceuil</a>
-            <a type="button" class="btn amado-btn desactive mb-15" href="{{ path('shop') }}">Magasin</a>
-            <a type="button" class="btn amado-btn desactive mb-15" href="{{ path('app_login') }}">Se Connecter</a>
-            <a type="button" class="btn amado-btn desactive mb-15" href="{{ path('register') }}">S'enregister</a>
-        </div>
-    {% endif %}
-</body>
+    </footer>
+{% endblock %}
 
-{% block javascripts %}
-    <!-- ##### jQuery ##### -->
-    <script type="text/javascript" src="{{ asset('js/jquery/jquery-2.2.4.min.js') }}"></script>
-    <!-- Plugins js -->
-    <script type="text/javascript" src="{{ asset('js/plugins.js') }}"></script>
-    <!-- Active js -->
-    <script type="text/javascript" src="{{ asset('js/active.js') }}"></script>
+{% block Newsletter %}
 {% endblock %}

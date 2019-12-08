@@ -47,6 +47,15 @@ class ProductRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function findallWithLimit($limit): array
+    {
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.publishdate')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findByName($product): array
     {
         return $this->createQueryBuilder('p')

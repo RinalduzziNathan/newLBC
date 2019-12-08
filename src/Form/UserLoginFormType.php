@@ -21,7 +21,7 @@ class UserLoginFormType extends AbstractType
     {
         $builder
             ->add('username' , TextType::class,[
-                'attr'=> ['class'=> 'form-control',"placeholder"=>"Pseudo"],
+                'attr'=> ['class'=> 'form-control',"placeholder"=>"Nom d'utilisateur"],
                 'label' => false,
             ])
             ->add('firstname', TextType::class,[
@@ -33,11 +33,11 @@ class UserLoginFormType extends AbstractType
                 'label' => false,
                 'required' => true,])
             ->add('email', TextType::class,[
-                'attr'=> ['class'=> 'form-control',"placeholder"=>"email"],
+                'attr'=> ['class'=> 'form-control',"placeholder"=>"Email"],
                 'label' => false,
                 'required' => true,])
             ->add('phone', TextType::class,[
-                'attr'=> ['class'=> 'form-control',"placeholder"=>"Numéro de telephone"],
+                'attr'=> ['class'=> 'form-control',"placeholder"=>"Numéro de téléphone"],
                 'label' => false,
                 'required' => true,])
             ->add('password', RepeatedType::class, [
@@ -46,9 +46,9 @@ class UserLoginFormType extends AbstractType
                 'type' => PasswordType::class,
                 'required' => true,
                 'first_options'  => [
-                    'attr'=> ['class'=> 'form-control',"placeholder"=>"MDP"],"label"=>false],
+                    'attr'=> ['class'=> 'form-control',"placeholder"=>"Mot de passe"],"label"=>false],
                 'second_options' => [
-                    'attr'=> ['class'=> 'form-control',"placeholder"=>"Repeter MDP"],"label"=>false,],
+                    'attr'=> ['class'=> 'form-control',"placeholder"=>"Répéter le mot de passe"],"label"=>false,],
             ])
             ->add('address', TextType::class,[
                 'attr'=> ['class'=> 'form-control',"placeholder"=>"Adresse"],
@@ -59,15 +59,15 @@ class UserLoginFormType extends AbstractType
                 'label' => false,
                 'required' => true,])
             ->add('postalcode', IntegerType::class,[
-                'attr'=> ['class'=> 'form-control',"placeholder"=>"Code Postal "],
+                'attr'=> ['class'=> 'form-control',"placeholder"=>"Code Postal"],
                 'label' => false,
                 'required' => true,] )
             ->add('description',TextareaType::class,[
-                'attr' =>['class'=> 'form-control w-100',"placeholder"=>"Decrivez vous !", "cols"=>"30", "rows"=>"10"],
+                'attr' =>['class'=> 'form-control w-100',"placeholder"=>"Décrivez vous !", "cols"=>"30", "rows"=>"10"],
                 'label' => false,
                 'required' => false,])
             ->add('userImage',ImportImageUserFormType::class)
-            ->add('submit',SubmitType::class)
+            ->add('Enregister',SubmitType::class)
         ;
     }
 

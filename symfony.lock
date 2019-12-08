@@ -90,6 +90,9 @@
     "ocramius/proxy-manager": {
         "version": "2.2.3"
     },
+    "openbuildings/swiftmailer-css-inliner": {
+        "version": "0.5.2"
+    },
     "php": {
         "version": "7.3"
     },
@@ -153,6 +156,9 @@
             "./bin/console",
             "./config/bootstrap.php"
         ]
+    },
+    "symfony/css-selector": {
+        "version": "v5.0.1"
     },
     "symfony/dependency-injection": {
         "version": "v5.0.0"
@@ -374,6 +380,9 @@
     },
     "symfony/yaml": {
         "version": "v5.0.0"
+    },
+    "tijsverkoyen/css-to-inline-styles": {
+        "version": "2.2.2"
     },
     "twig/extra-bundle": {
         "version": "v3.0.0"
