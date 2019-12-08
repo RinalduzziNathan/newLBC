@@ -19,16 +19,16 @@ class CreateProductFormType extends AbstractType
     {
         $builder
             ->add('name', TextType::class,[
-                'attr'=> ['class'=> 'form-control',"placeholder"=>"Veuillez donner un titre précis de l'annonce."],
+                'attr'=> ['class'=> 'form-control',"placeholder"=>"Titre de l'annonce"],
                 'label' => false,
                 'required' => true,
             ])
             ->add('description',TextareaType::class,[
-                'attr' =>['class'=> 'form-control w-100',"placeholder"=>"Veuillez donner une description précise et complète de l'annonce et des condition de vente.", "cols"=>"30", "rows"=>"10"],
+                'attr' =>['class'=> 'form-control w-100',"placeholder"=>"Description précise et complète de l'annonce et des conditions de vente", "cols"=>"30", "rows"=>"10"],
                 'label' => false,
                 'required' => true,])
             ->add('price',IntegerType::class,[
-                'attr'=> ['class'=> 'form-control',"placeholder"=>"Choisissez un prix réaliste."],
+                'attr'=> ['class'=> 'form-control',"placeholder"=>"Prix"],
                 'label' => false,
                 'required' => true,])
             ->add('category',ChoiceType::class,[
@@ -40,7 +40,7 @@ class CreateProductFormType extends AbstractType
                     'MULTIMEDIA' => 'MULTIMEDIA' ,
                     'MATERIEL' => 'MATERIEL' ,
                 ],
-                'attr'=> ['class'=> 'form-control',"placeholder"=>"Veuillez l'état du produit."],
+                'attr'=> ['class'=> 'form-control',"placeholder"=>"Catégorie votre produit"],
                 'label' => false,
                 'required' => true,])
             ->add('state',ChoiceType::class,[
@@ -51,7 +51,7 @@ class CreateProductFormType extends AbstractType
                     "Mais c'etait sur" => "Mais c'etait sur",
                     'label' => false,
                 ],
-                'attr'=> ['class'=> 'form-control',"placeholder"=>"Veuillez l'état du produit."],
+                'attr'=> ['class'=> 'form-control',"placeholder"=>"Etat de votre produit"],
                 'label' => false,
                 'required' => true,])
             ->add('productImages',CollectionType::class,[

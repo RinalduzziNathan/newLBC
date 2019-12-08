@@ -15,7 +15,7 @@ class ImportImageUserFormType extends AbstractType
         $builder
             ->add('filename',FileType::class, [
                     'attr' =>['class'=> 'form-control'],
-                    'help' => 'Selectioner une image',
+                    'help' => 'Séléctioner une image',
                     'label' => false,
                     'required' => true,]);
     }
