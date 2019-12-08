@@ -27,9 +27,6 @@ class HomepageController extends AbstractController
         }
         $repository = $em->getRepository(Product::class);
         $products = $repository->findAll();
-        if(!$products) {
-            throw $this->createNotFoundException('Sorry, there is no product');
-        }
 
         $formMail = $this->createForm(SendMailFormType::class);
         $formMail->handleRequest($request);
