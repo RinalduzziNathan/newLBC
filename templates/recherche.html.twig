@@ -1,14 +1,17 @@
+{% extends 'base.html.twig' %}
 
-<h1>VOICI LA PAGE DE TESTE</h1>
-{{form_start(formSearch)}}
-{{ form_end(formSearch) }}
+{% block Content %}
+    <h1>VOICI LA PAGE DE TESTE</h1>
+    {{form_start(formSearch)}}
+    {{ form_end(formSearch) }}
 
-{% if result is defined %}
-    {% if result != null %}
-        {% for product in result %}
-            {{ product.getName() }}
-        {% endfor %}
-    {% else %}
-        <h1>Désolé aucun produit ne correspond à votre recherche...</h1>
+    {% if result is defined %}
+        {% if result != null %}
+            {% for product in result %}
+                {{ product.getName() }}
+            {% endfor %}
+        {% else %}
+            <h1>Désolé aucun produit ne correspond à votre recherche...</h1>
+        {% endif %}
     {% endif %}
-{% endif %}
+{% endblock %}

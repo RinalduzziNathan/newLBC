@@ -20,7 +20,7 @@ class SearchProductFormType extends AbstractType
                 'label' => false,
                 'required' => true,])
         ->add('submit',SubmitType::class,[
-            'attr'=> ['class'=> 'btn amado-btn w-100 active'],
+            'attr'=> ['class'=> 'btn amado-btn w-100 active','type'=>'button'],
             'label'=> "Rechercher"
         ]);
     }
