@@ -67,7 +67,25 @@ class ProductController extends AbstractController
             'formMail' => $formMail->createView()
         ]);
     }
-
+    /**
+     * @Route("/deleteproduct/{productid}", name="deleteproduct")
+     */
+    public function DeleteProduct(Request $request, EntityManagerInterface $em, Security $security, $productid)
+    {
+        if( !$security->isGranted('IS_AUTHENTICATED_FULLY') ){
+            return $this->redirectToRoute('app_login');
+        }
+        $product = $em->getRepository(Product::class)->find($productid);
+        if($product==null){
+            return $this->redirectToRoute('index'); 
+        }
+        
+        if($this->getUser() == $product->getUser()) {
+            $em->remove($product); 
+            $em->flush();
+        }
+        return $this->redirectToRoute('index'); 
+    }
     /**
      * @Route("/product/{productId}",name="productDetails")
      **/
@@ -79,8 +97,14 @@ class ProductController extends AbstractController
             return $this->redirectToRoute('sendmail', ["email" => $email]);
         }
 
+        $formSearch = $this->createForm(SearchProductFormType::class);
+        $formSearch->handleRequest($request); // On récupère le formulaire envoyé dans la requête
+
         $repository = $em->getRepository(Product::class);
         $product = $repository->find($productId);
+        if($product==null){
+            return $this->redirectToRoute('index'); 
+        }
         $repository = $em->getRepository(UserLogin::class);
         $userid = $product->getUser()->getId();
         $user = $repository->find($userid);
@@ -93,7 +117,8 @@ class ProductController extends AbstractController
         return $this->render('product/productDetails.html.twig', [
             "product" => $product,
             "user" => $user,
-            'formMail' => $formMail->createView()
+            'formMail' => $formMail->createView(),
+            'formSearch' => $formSearch->createView()
         ]);
     }
 
@@ -262,18 +287,13 @@ class ProductController extends AbstractController
     }
 
      /**
-     * @Route("/product/immobilier/{productname}")
-
+     * @Route("v1/product/{category}/{productname}")
      */
-    public function GetMeubleName($productname,EntityManagerInterface $em){
-         $Array = [
-            1=>["tête","pied","jambe","rein"],
-            2=>"jaaaaj",
-            3=>"foo()"
-        ];
+    public function RestApi($category,$productname,EntityManagerInterface $em){
+      
          $repository = $em->getRepository(Product::class);
-         //$product = $repository->findByNameAndCategory($productname, "immobilier");
-         $product = $repository->find(9);
+         $product = $repository->findByNameAndCategory($productname, "immobilier");
+    
         $encoder = new JsonEncoder();
         $defaultContext = [
             AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
@@ -282,6 +302,18 @@ class ProductController extends AbstractController
         ];
         $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
         $serializer = new Serializer([$normalizer], [$encoder]);
+        //dd($product);
         return new JsonResponse($serializer->serialize($product, 'json'));
+        
+    }
+
+      /**
+     * @Route("test")
+     */
+    public function test(){
+        $client = HttpClient::create();
+        $response = $client->request('GET',"http://localhost:8000/v1/product/immobilier/z");
+    //'https://api.themoviedb.org/3/movie/5?api_key=cbe364327a49b1c86ffcc7c688737058&language=fr'
+     
     }
 }
