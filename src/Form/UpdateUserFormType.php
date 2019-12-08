@@ -19,15 +19,15 @@ class UpdateUserFormType extends AbstractType
     {
         $builder
             ->add('username' , TextType::class,[
-                'attr'=> ['class'=> 'form-control',"placeholder"=>$options['pseudo']],
+                'attr'=> ['class'=> 'form-control',"placeholder"=>$options['username']],
                 'label' => false,
             ])
             ->add('firstname', TextType::class,[
-                'attr'=> ['class'=> 'form-control',"placeholder"=>$options['nom']],
+                'attr'=> ['class'=> 'form-control',"placeholder"=>$options['firstname']],
                 'label' => false,
                 'required' => true,])
             ->add('lastname', TextType::class,[
-                'attr'=> ['class'=> 'form-control',"placeholder"=>$options['prenom']],
+                'attr'=> ['class'=> 'form-control',"placeholder"=>$options['lastname']],
                 'label' => false,
                 'required' => true,])
             ->add('email', TextType::class,[
@@ -44,9 +44,9 @@ class UpdateUserFormType extends AbstractType
                 'type' => PasswordType::class,
                 'required' => true,
                 'first_options'  => [
-                    'attr'=> ['class'=> 'form-control',"placeholder"=>"MDP"],"label"=>false],
+                    'attr'=> ['class'=> 'form-control',"placeholder"=>"Mot de passe"],"label"=>false],
                 'second_options' => [
-                    'attr'=> ['class'=> 'form-control',"placeholder"=>"Repeter MDP"],"label"=>false,],
+                    'attr'=> ['class'=> 'form-control',"placeholder"=>"Répéter le mot de passe"],"label"=>false,],
             ])
             ->add('address', TextType::class,[
                 'attr'=> ['class'=> 'form-control',"placeholder"=>$options['address']],
@@ -64,7 +64,7 @@ class UpdateUserFormType extends AbstractType
                 'attr' =>['class'=> 'form-control w-100',"placeholder"=>$options['description'], "cols"=>"30", "rows"=>"10"],
                 'label' => false,
                 'required' => false,])
-            ->add('submit',SubmitType::class)
+            ->add('Editer',SubmitType::class)
         ;
     }
 
