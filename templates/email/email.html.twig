@@ -1,99 +1,74 @@
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="description" content="">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+{% extends 'base.html.twig' %}
 
-
-    <!-- Title  -->
-    <title>{% block title %}LeBonCoinCoin{% endblock %}</title>
-
-    <!-- Favicon  -->
-    {% block icon %}
-        <link rel="icon" href="{{ asset('img/core-img/logosanstexte.png') }}" >
-    {% endblock %}
-
-    <!-- Core Style CSS -->
-    {% block stylesheets %}
-        <link rel="stylesheet" href="{{ asset('css/core-style.css') }}" type="text/css">
-
-    {% endblock %}
-
-</head>
-
-<body>
-    {% if user != null %}
-        <div align="center"><h1>Merci {{ user.getFirstname() }} de vous être abonné à notre NewsLettre</h1></div>
-        <h2><u>Voici nos derniers produits:</u></h2>
-        <div class="main-content-wrapper d-flex clearfix">
-            <div class="products-catagories-area clearfix">
-                <div class="amado-pro-catagory clearfix">
-                    {% for product in products %}
-                        <!-- Single Catagory -->
-                        <div class="single-products-catagory clearfix">
-                            <a href="{{ path('productDetails', {productId: product.id }) }}">
-                                <img src="{{ asset('uploads/'~product.getProductImages()[0].filename) }}" alt="">
-                                <!-- Hover Content -->
-                                <div class="hover-content">
-                                    <div class="line"></div>
-                                    <p>Price {{ product.getPrice() }}€</p>
-                                    <h4>{{ product.getName() }}</h4>
-                                </div>
-                            </a>
-                        </div>
-                    {% endfor %}
+{% block LeftBar %}
+    {% block Content %}
+        {% if user != null %}
+            <div align="center"><h1>Merci {{ user.getFirstname() }} de vous être abonné à notre NewsLettre</h1></div>
+            <h2><u>Voici nos derniers produits:</u></h2>
+            <div class="main-content-wrapper d-flex clearfix">
+                <div class="products-catagories-area clearfix">
+                    <div class="amado-pro-catagory clearfix">
+                        {% for product in products %}
+                            <!-- Single Catagory -->
+                            <div class="single-products-catagory clearfix">
+                                <a href="{{ path('productDetails', {productId: product.id }) }}">
+                                    <img src="{{ asset('uploads/'~product.getProductImages()[0].filename) }}" alt="">
+                                    <!-- Hover Content -->
+                                    <div class="hover-content">
+                                        <div class="line"></div>
+                                        <p>Price {{ product.getPrice() }}€</p>
+                                        <h4>{{ product.getName() }}</h4>
+                                    </div>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
-        </div>
-        <br><br>
-        <h2><u>Pour plus d'information vous pouvez:</u></h2>
-        <div class="amado-btn-group mt-30 mb-100">
-            <a type="button" class="btn amado-btn desactive mb-15" href="{{ path('index') }}">Acceuil</a>
-            <a type="button" class="btn amado-btn desactive mb-15" href="{{ path('shop') }}">Magasin</a>
-            <a type="button" class="btn amado-btn desactive mb-15" href="{{ path('editprofile', {userid: user.id }) }}">Editer profil</a></p>
-            <a type="button" class="btn amado-btn desactive mb-15" href="{{ path('profile', {id: user.id }) }}">Profil</a></p>
-            <a type="button" class="btn amado-btn desactive mb-15" href="{{ path('publishproduct') }}">Déposer votre annonce</a></p><br>
-        </div>
-    {% else %}
-        <div align="center"><h1>Merci de vous être abonné à notre NewsLettre</h1></div>
-        <h2><u>Voici nos derniers produits:</u></h2>
-        <div class="main-content-wrapper d-flex clearfix">
-            <div class="products-catagories-area clearfix">
-                <div class="amado-pro-catagory clearfix">
-                    {% for product in products %}
-                        <!-- Single Catagory -->
-                        <div class="single-products-catagory clearfix">
-                            <a href="{{ path('productDetails', {productId: product.id }) }}">
-                                <img src="{{ asset('uploads/'~product.getProductImages()[0].filename) }}" alt="">
-                                <!-- Hover Content -->
-                                <div class="hover-content">
-                                    <div class="line"></div>
-                                    <p>Price {{ product.getPrice() }}€</p>
-                                    <h4>{{ product.getName() }}</h4>
-                                </div>
-                            </a>
-                        </div>
-                    {% endfor %}
+            <br><br>
+            <h2><u>Pour plus d'information vous pouvez:</u></h2>
+            <div class="amado-btn-group mt-30 mb-100">
+                <a type="button" class="btn amado-btn mb-15" href="{{ path('index') }}">Acceuil</a>
+                <a type="button" class="btn amado-btn mb-15" href="{{ path('shop') }}">Magasin</a>
+                <a type="button" class="btn amado-btn mb-15" href="{{ path('editprofile', {userid: user.id }) }}">Editer profil</a></p>
+                <a type="button" class="btn amado-btn mb-15" href="{{ path('profile', {id: user.id }) }}">Profil</a></p>
+                <a type="button" class="btn amado-btn mb-15" href="{{ path('publishproduct') }}">Déposer votre annonce</a></p><br>
+            </div>
+        {% else %}
+            <div align="center"><h1>Merci de vous être abonné à notre NewsLettre</h1></div>
+            <h2><u>Voici nos derniers produits:</u></h2>
+            <div class="main-content-wrapper d-flex clearfix">
+                <div class="products-catagories-area clearfix">
+                    <div class="amado-pro-catagory clearfix">
+                        {% for product in products %}
+                            <!-- Single Catagory -->
+                            <div class="single-products-catagory clearfix">
+                                <a href="{{ path('productDetails', {productId: product.id }) }}">
+                                    <img src="{{ asset('uploads/'~product.getProductImages()[0].filename) }}" alt="">
+                                    <!-- Hover Content -->
+                                    <div class="hover-content">
+                                        <div class="line"></div>
+                                        <p>Price {{ product.getPrice() }}€</p>
+                                        <h4>{{ product.getName() }}</h4>
+                                    </div>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
-        </div>
-        <br><br>
-        <h2><u>Pour plus d'information vous pouvez:</u></h2>
-        <div class="amado-btn-group mt-30 mb-100">
-            <a type="button" class="btn amado-btn desactive mb-15" href="{{ path('index') }}">Acceuil</a>
-            <a type="button" class="btn amado-btn desactive mb-15" href="{{ path('shop') }}">Magasin</a>
-            <a type="button" class="btn amado-btn desactive mb-15" href="{{ path('app_login') }}">Se Connecter</a>
-            <a type="button" class="btn amado-btn desactive mb-15" href="{{ path('register') }}">S'enregister</a>
-        </div>
-    {% endif %}
-</body>
+            <br><br>
+            <h2><u>Pour plus d'information vous pouvez:</u></h2>
+            <div class="amado-btn-group mt-30 mb-100">
+                <a type="button" class="btn amado-btn mb-15" href="{{ path('index') }}">Acceuil</a>
+                <a type="button" class="btn amado-btn mb-15" href="{{ path('shop') }}">Magasin</a>
+                <a type="button" class="btn amado-btn mb-15" href="{{ path('app_login') }}">Se Connecter</a>
+                <a type="button" class="btn amado-btn mb-15" href="{{ path('register') }}">S'enregister</a>
+            </div>
+        {% endif %}
 
-{% block javascripts %}
-    <!-- ##### jQuery ##### -->
-    <script type="text/javascript" src="{{ asset('js/jquery/jquery-2.2.4.min.js') }}"></script>
-    <!-- Plugins js -->
-    <script type="text/javascript" src="{{ asset('js/plugins.js') }}"></script>
-    <!-- Active js -->
-    <script type="text/javascript" src="{{ asset('js/active.js') }}"></script>
+    {% endblock %}
+{% endblock %}
+
+{% block Newsletter %}
 {% endblock %}
