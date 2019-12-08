@@ -39,14 +39,10 @@
                     {{form_end(formSearch)}}
                     <!--
                     <div class="search-content">
-
-
                             <form action="#" method="get">
                             <input type="search" name="search" id="search" placeholder="Type your keyword...">
                             <button type="submit"><img src="{{ asset('img/core-img/search.png') }}" alt="search"></button>
                         </form>-->
-
-
                     </div>
                 </div>
             </div>
@@ -108,7 +104,6 @@
                 {% if app.user %}
                     <a href="{{ path('profile', {id: app.user.id }) }}" class="acount-nav"><i class="fa fa-user"> </i> {{ app.user.username }} </a>
                 {% endif %}
-                <a href="#" class="fav-nav"><i class="fa fa-star"></i> Favoris</a>
                 <a href="#" class="search-nav"><i class="fa fa-search"></i> Rechercher</a>
             </div>
             <!-- Social Button -->
