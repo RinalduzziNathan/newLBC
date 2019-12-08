@@ -101,7 +101,8 @@
                             <p> {{ product.getDescription() }} </p>
                             {% if app.user %}
                                 {% if app.user.id == user.getId() %}
-                                    <a href="{{ path('editproduct', {productid: product.id }) }}" class="btn profile-edit-btn amado-btn "><i class="fa fa-cog" aria-hidden="true"></i> Edit Annonce</a>
+                                    <a href="{{ path('editproduct', {productid: product.id }) }}" class="btn profile-edit-btn amado-btn "><i class="fa fa-cog" aria-hidden="true"></i> Editer l'annonce</a>
+                                     <a href="{{ path('deleteproduct', {productid: product.id }) }}" class="btn profile-edit-btn amado-btn "><i class="fa fa-cog" aria-hidden="true"></i> Supprimer l'annonce</a>
                                 {% endif %}
                             {% endif %}
                         </div>

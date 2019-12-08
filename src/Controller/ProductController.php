@@ -9,6 +9,7 @@ use App\Form\CreateProductFormType;
 use App\Form\SearchProductFormType;
 use App\Form\SendMailFormType;
 use App\Form\UpdateProductFormType;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
@@ -24,8 +25,7 @@ use Symfony\Component\Serializer\Serializer;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
-
+use Symfony\Component\HttpClient\HttpClient;
 
 class ProductController extends AbstractController
 {
@@ -151,7 +151,24 @@ class ProductController extends AbstractController
 
         return $this->render('product/publishproduct.html.twig', ['form' => $form->createView(),'formMail' => $formMail->createView()]); // on envoie ensuite le formulaire au template
     }
+     /**
+     * @Route("/deleteproduct/{productid}", name="deleteproduct")
+     */
+    public function DeleteProduct(Request $request, EntityManagerInterface $em, Security $security, $productid)
+    {
+        if( !$security->isGranted('IS_AUTHENTICATED_FULLY') ){
+            return $this->redirectToRoute('app_login');
+        }
 
+        $product = new Product();
+        $product = $em->getRepository(Product::class)->find($productid);
+        
+        $em->remove($product); 
+        $em->flush();
+
+        return $this->redirectToRoute('index'); 
+
+    }
     /**
      * @Route("/editproduct/{productid}", name="editproduct")
      */
@@ -254,9 +271,11 @@ class ProductController extends AbstractController
      * @Route("v1/product/{category}/{productname}")
      */
     public function RestApi($category,$productname,EntityManagerInterface $em){
-      
+        $Arr=["qsdmndqm","zinzolin","fai","vg"];
+
         $repository = $em->getRepository(Product::class);
         $product = $repository->findByNameAndCategory($productname, $category);
+  
          
         //$product = $repository->find(9);
         $encoder = new JsonEncoder();
@@ -268,6 +287,22 @@ class ProductController extends AbstractController
         $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
         $serializer = new Serializer([$normalizer], [$encoder]);
         //dd($product);
-        return new JsonResponse($serializer->serialize($product, 'json'));
+       // return new JsonResponse($serializer->serialize($product, 'json'));
+        
+        return new JsonResponse($Arr);
     }
+
+      /**
+     * @Route("test")
+     */
+    public function test(){
+     $client = HttpClient::create();
+     $response = $client->request('GET',"http://localhost:8000/v1/product/immobilier/z");
+//'https://api.themoviedb.org/3/movie/5?api_key=cbe364327a49b1c86ffcc7c688737058&language=fr'
+     
+    }
+
+
+
+
 }
