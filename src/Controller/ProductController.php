@@ -160,12 +160,15 @@ class ProductController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        $product = new Product();
         $product = $em->getRepository(Product::class)->find($productid);
+        if($product==null){
+            return $this->redirectToRoute('index'); 
+        }
         
-        $em->remove($product); 
-        $em->flush();
-
+        if($this->getUser() == $product->getUser()) {
+            $em->remove($product); 
+            $em->flush();
+        }
         return $this->redirectToRoute('index'); 
 
     }
@@ -187,6 +190,9 @@ class ProductController extends AbstractController
 
         $product = new Product();
         $product = $em->getRepository(Product::class)->find($productid);
+        if($product==null){
+            return $this->redirectToRoute('index'); 
+        }
         if($this->getUser() == $product->getUser()) {
             $form = $this->createForm(UpdateProductFormType::class, $product, [
                 'name' => $product->getName(),
