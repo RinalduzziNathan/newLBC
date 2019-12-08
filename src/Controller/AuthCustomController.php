@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Product;
 use App\Entity\UserImage;
 use App\Entity\UserLogin;
 use App\Form\SearchProductFormType;
@@ -27,7 +28,7 @@ class AuthCustomController extends AbstractController
      * @param AuthenticationUtils $authenticationUtils
      * @return Response
      */
-    public function login(AuthenticationUtils $authenticationUtils ,Request $request): Response
+    public function login(AuthenticationUtils $authenticationUtils ,Request $request,EntityManagerInterface $em): Response
     {
         // if ($this->getUser()) {
         //     return $this->redirectToRoute('index');
@@ -38,15 +39,27 @@ class AuthCustomController extends AbstractController
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        $formSearch = $this->createForm(SearchProductFormType::class);
-        $formSearch->handleRequest($request); // On récupère le formulaire envoyé dans la requête
+
 
         $formMail = $this->createForm(SendMailFormType::class);
         $formMail->handleRequest($request);
+
         if ($formMail->isSubmitted() && $formMail->isValid()) {
             $email = $formMail->getData()['email'];
             return $this->redirectToRoute('sendmail', ["email" => $email]);
         }
+
+        $formSearch = $this->createForm(SearchProductFormType::class);
+        $formSearch->handleRequest($request);
+
+        if ($formSearch->isSubmitted() && $formSearch->isValid()) {
+            $repository = $em->getRepository(Product::class);
+            $article = $formSearch->getData(); // On récupère l'article associé
+            $name = $article["recherche"];
+            $names = $repository->findByName($name);
+            return $this->render('product/recherche.html.twig', ['formSearch' => $formSearch->createView(), 'formMail' => $formMail->createView(), 'result'=>$names]); // Hop redirigé et on sort du controller
+        }
+
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername,'formMail' => $formMail->createView(), 'error' => $error, 'formSearch' => $formSearch->createView()]);
         //        //return new RedirectResponse($this->urlGenerator->generate('/login'));
     }
@@ -60,8 +73,6 @@ class AuthCustomController extends AbstractController
         $form = $this->createForm(UserLoginFormType::class,$user);
         $form->handleRequest($request); // On récupère le formulaire envoyé dans la requête
 
-        $formSearch = $this->createForm(SearchProductFormType::class);
-        $formSearch->handleRequest($request); // On récupère le formulaire envoyé dans la requête
 
         $formMail = $this->createForm(SendMailFormType::class);
         $formMail->handleRequest($request);
@@ -110,6 +121,17 @@ class AuthCustomController extends AbstractController
             $em->flush(); // on save
             return $this->redirectToRoute('sendmail', ['email' => $user->getEmail()]);
         }
+
+        $formSearch = $this->createForm(SearchProductFormType::class);
+        $formSearch->handleRequest($request);
+
+        if ($formSearch->isSubmitted() && $formSearch->isValid()) {
+            $repository = $em->getRepository(Product::class);
+            $article = $formSearch->getData(); // On récupère l'article associé
+            $name = $article["recherche"];
+            $names = $repository->findByName($name);
+            return $this->render('product/recherche.html.twig', ['formSearch' => $formSearch->createView(), 'formMail' => $formMail->createView(), 'result'=>$names]); // Hop redirigé et on sort du controller
+        }
         return $this->render('security/register.html.twig', ['form' => $form->createView(),'formMail' => $formMail->createView(), 'formSearch' => $formSearch->createView()]); // Hop redirigé et on sort du controller
     }
 
@@ -124,10 +146,16 @@ class AuthCustomController extends AbstractController
             $email = $formMail->getData()['email'];
             return $this->redirectToRoute('sendmail', ["email" => $email]);
         }
-
         $formSearch = $this->createForm(SearchProductFormType::class);
-        $formSearch->handleRequest($request); // On récupère le formulaire envoyé dans la requête
+        $formSearch->handleRequest($request);
 
+        if ($formSearch->isSubmitted() && $formSearch->isValid()) {
+            $repository = $em->getRepository(Product::class);
+            $article = $formSearch->getData(); // On récupère l'article associé
+            $name = $article["recherche"];
+            $names = $repository->findByName($name);
+            return $this->render('product/recherche.html.twig', ['formSearch' => $formSearch->createView(), 'formMail' => $formMail->createView(), 'result'=>$names]); // Hop redirigé et on sort du controller
+        }
         if ($this->getUser() != null)
         {
             if ($this->getUser()->getId() == $userid) {
@@ -162,10 +190,10 @@ class AuthCustomController extends AbstractController
             }
         }
         else {
-            return $this->redirectToRoute("index");
+            return $this->redirectToRoute("index",['formMail' => $formMail->createView(), 'formSearch' => $formSearch->createView()]);
         }
         
-        return $this->redirectToRoute('index'); 
+        return $this->redirectToRoute('index',['formMail' => $formMail->createView(), 'formSearch' => $formSearch->createView()]);
         
     }
 
@@ -183,8 +211,7 @@ class AuthCustomController extends AbstractController
      */
     public function UserInfo(EntityManagerInterface $em, Request $request, $id)
     {
-        $formSearch = $this->createForm(SearchProductFormType::class);
-        $formSearch->handleRequest($request); // On récupère le formulaire envoyé dans la requête
+
 
         $formMail = $this->createForm(SendMailFormType::class);
         $formMail->handleRequest($request);
@@ -192,7 +219,17 @@ class AuthCustomController extends AbstractController
             $email = $formMail->getData()['email'];
             return $this->redirectToRoute('sendmail', ["email" => $email]);
         }
+        $formSearch = $this->createForm(SearchProductFormType::class);
+        $formSearch->handleRequest($request);
 
+        if ($formSearch->isSubmitted() && $formSearch->isValid()) {
+            $repository = $em->getRepository(Product::class);
+            $article = $formSearch->getData(); // On récupère l'article associé
+            $name = $article["recherche"];
+            $names = $repository->findByName($name);
+            return $this->render('product/recherche.html.twig', ['formSearch' => $formSearch->createView(), 'formMail' => $formMail->createView(), 'result'=>$names]); // Hop redirigé et on sort du controller
+        }
+        
         $repository = $em->getRepository(UserLogin::class);
         $user = $repository->find($id);
         if(!$user) {
