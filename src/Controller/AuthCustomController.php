@@ -230,9 +230,6 @@ class AuthCustomController extends AbstractController
 
         $repository = $em->getRepository(UserLogin::class);
         $user = $repository->find($id);
-        if(!$user) {
-            throw $this->createNotFoundException('Sorry, there is no user with this id');
-        }
         return $this->render('security/profile.html.twig', [
             "user" => $user,
             'formMail' => $formMail->createView(),

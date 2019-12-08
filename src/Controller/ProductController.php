@@ -136,12 +136,7 @@ class ProductController extends AbstractController
         $repository = $em->getRepository(UserLogin::class);
         $userid = $product->getUser()->getId();
         $user = $repository->find($userid);
-        if(!$product) {
-            throw $this->createNotFoundException('Sorry, there is no product with this id');
-        }
-        if(!$user) {
-            throw $this->createNotFoundException('Sorry, there is no user attach to this product');
-        }
+
         $formSearch = $this->createForm(SearchProductFormType::class);
         $formSearch->handleRequest($request); // On récupère le formulaire envoyé dans la requête
 
@@ -217,15 +212,12 @@ class ProductController extends AbstractController
                     } catch (FileException $e) {
                         // ... handle exception if something happens during file upload
                     }
-
                     // updates the 'brochureFilename' property to store the PDF file name
                     // instead of its contents
                     $image->setFilename($newFilename);
                     $image->setProduct($product);
                     $product->addProductImage($image);
-
                     //$em->persist($image);
-
                 }
             }
 

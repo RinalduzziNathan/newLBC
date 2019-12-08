@@ -43,9 +43,6 @@ class HomepageController extends AbstractController
             $article = $formSearch->getData(); // On récupère l'article associé
             $name = $article["recherche"];
             $names = $repository->findByName($name);
-            if(!$names) {
-                throw $this->createNotFoundException('Sorry, there is no product with this name');
-            }
             return $this->render('product/recherche.html.twig', ['formSearch' => $formSearch->createView(), 'formMail' => $formMail->createView(), 'result'=>$names]); // Hop redirigé et on sort du controller
         }
             return $this->render('homepage/index.html.twig', [
@@ -63,7 +60,6 @@ class HomepageController extends AbstractController
         $converter->convert($css);
         $mailer->registerPlugin(new CssInlinerPlugin($converter));
 
-        
         $repository = $em->getRepository(Product::class);
         $products = $repository->findallWithLimit(6);
         $message = (new \Swift_Message('Hello Email'))
