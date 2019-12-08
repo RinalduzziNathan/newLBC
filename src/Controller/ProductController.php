@@ -251,18 +251,14 @@ class ProductController extends AbstractController
     }
 
      /**
-     * @Route("/product/immobilier/{productname}")
-
+     * @Route("v1/product/{category}/{productname}")
      */
-    public function GetMeubleName($productname,EntityManagerInterface $em){
-         $Array = [
-            1=>["tête","pied","jambe","rein"],
-            2=>"jaaaaj",
-            3=>"foo()"
-        ];
-         $repository = $em->getRepository(Product::class);
-         //$product = $repository->findByNameAndCategory($productname, "immobilier");
-         $product = $repository->find(9);
+    public function RestApi($category,$productname,EntityManagerInterface $em){
+      
+        $repository = $em->getRepository(Product::class);
+        $product = $repository->findByNameAndCategory($productname, $category);
+         
+        //$product = $repository->find(9);
         $encoder = new JsonEncoder();
         $defaultContext = [
             AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
@@ -271,6 +267,7 @@ class ProductController extends AbstractController
         ];
         $normalizer = new ObjectNormalizer(null, null, null, null, null, null, $defaultContext);
         $serializer = new Serializer([$normalizer], [$encoder]);
+        //dd($product);
         return new JsonResponse($serializer->serialize($product, 'json'));
     }
 }
