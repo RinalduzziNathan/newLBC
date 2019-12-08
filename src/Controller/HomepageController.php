@@ -43,23 +43,26 @@ class HomepageController extends AbstractController
     /**
      * @Route("/sendmail/{email}", name="sendmail")
      */
-    public function SendMail(Swift_Mailer $mailer, $email, EntityManagerInterface $em)
+    public function SendMail(\Swift_Mailer $mailer, $email, EntityManagerInterface $em)
     {
         $repository = $em->getRepository(Product::class);
-        $products = $repository->findAll();
-        if($this->getUser() != null)
-            $user = $this->getUser();
-        else
-            $user = null;
+        $products = $repository->findallWithLimit(6);
+
         $message = (new \Swift_Message('Hello Email'))
             ->setFrom('maiscetaitsur@gmail.com')
             ->setTo($email)
             ->setBody(
                 $this->renderView(
                     'email/email.html.twig', [
-                    "user" => $user,
                     "products" => $products
-                ])
+                ]),'text/html'
+            )        ->addPart(
+                $this->renderView(
+                // templates/emails/registration.txt.twig
+                    'email/email.html.twig',
+                    ['products' => $products]
+                ),
+                'text/plain'
             )
         ;
         $mailer->send($message);
@@ -74,12 +77,7 @@ class HomepageController extends AbstractController
     {
         $repository = $em->getRepository(Product::class);
         $products = $repository->findAll();
-        if($this->getUser() != null)
-            $user = $this->getUser();
-        else
-            $user = null;
         return $this->render('email/email.html.twig', [
-            "user" => $user,
             "products" => $products
         ]);
     }

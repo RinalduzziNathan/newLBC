@@ -13,8 +13,14 @@ class SendMailFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email',EmailType::class)
-            ->add('submit',SubmitType::class);
+            ->add('email',EmailType::class,[
+                'attr'=> ["placeholder"=>"Entrez votre email."],
+                'label' => false,
+            ])
+            ->add('submit',SubmitType::class,[
+                'attr'=> ['class'=> 'btn amado-btn w-100 active'],
+                'label'=> "Envoyer"
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
