@@ -101,13 +101,25 @@ class HomepageController extends AbstractController
     /**
      * @Route("/mail", name="mail")
      */
-    public function Mail(EntityManagerInterface $em)
+    public function Mail(EntityManagerInterface $em, Request $request)
     {
+        $formSearch = $this->createForm(SearchProductFormType::class);
+        $formSearch->handleRequest($request); // On récupère le formulaire envoyé dans la requête
+
+        if ($formSearch->isSubmitted() && $formSearch->isValid()) { // on véfifie si le formulaire est envoyé et si il est valide
+            $repository = $em->getRepository(Product::class);
+            $article = $formSearch->getData(); // On récupère l'article associé
+            $name = $article["recherche"];
+            $names = $repository->findByName($name);
+            return $this->render('product/recherche.html.twig', ['formSearch' => $formSearch->createView(),'names'=>$names]); // Hop redirigé et on sort du controller
+        }
+
         $repository = $em->getRepository(Product::class);
         $products = $repository->findAll();
 
         return $this->render('email/email.html.twig', [
-            "products" => $products
+            "products" => $products,
+            'formSearch' => $formSearch->createView()
         ]);
     }
 }
