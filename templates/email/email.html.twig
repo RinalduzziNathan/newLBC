@@ -14,8 +14,7 @@
                         {% for product in products %}
                             <!-- Single Catagory -->
                             <div class="single-products-catagory clearfix">
-                                <a href="{{ path('productDetails', {productId: product.id }) }}">
-                                    <img src="{{ asset('uploads/'~product.getProductImages()[0].filename) }}" alt="">
+                                <a href="http://localhost:8000/product/{{ product.id }) }}">
                                     <!-- Hover Content -->
                                     <div class="hover-content">
                                         <div class="line"></div>
@@ -43,7 +42,6 @@
                     <div class="single_widget_area">
                         <!-- Logo -->
                         <div class="footer-logo mr-50">
-                            <a href="{{  path('index') }}"><img src="{{ asset('img/core-img/logosanstexte.png') }}" alt="Second logo"></a>
                         </div>
                         <!-- Copywrite Text -->
                         <p class="copywrite">Copyright ©2019 All rights reserved.</br>
@@ -62,28 +60,28 @@
                                 <div class="collapse navbar-collapse" id="footerNavContent">
                                     <ul class="navbar-nav ml-auto">
                                         <li class="nav-item active">
-                                            <a class="nav-link" href="{{  path('index') }}">Acceuil</a>
+                                            <a class="nav-link" href="http://localhost:8000/">Acceuil</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="{{  path('shop') }}">Magasin</a>
+                                            <a class="nav-link" href="http://localhost:8000/shop">Magasin</a>
                                         </li>
                                         {% if app.user %}
                                             <li class="nav-item">
-                                                <a class="nav-link" href="{{  path('editprofile', {userid: app.user.id }) }}">Editer profil</a>
+                                                <a class="nav-link" href="http://localhost:8000/editprofile/{{  app.user.id }) }}">Editer profil</a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" href="{{  path('publishproduct') }}">Déposer votre annonce</a>
+                                                <a class="nav-link" href="http://localhost:8000/publishproduct">Déposer votre annonce</a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" href="{{  path('profile', {id: app.user.id }) }}">Profil</a>
+                                                <a class="nav-link" href="http://localhost:8000/profile/{{ app.user.id }) }}">Profil</a>
                                             </li>
 
                                         {% else %}
                                             <li class="nav-item">
-                                                <a class="nav-link" href="{{ path('register') }}">S'enregister</a>
+                                                <a class="nav-link" href="http://localhost:8000/register">S'enregister</a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" href="{{ path('app_login') }}">Se Connecter</a>
+                                                <a class="nav-link" href="http://localhost:8000/login">Se Connecter</a>
                                             </li>
                                         {% endif %}
 
