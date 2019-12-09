@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 
 class ImportImageUserFormType extends AbstractType
 {
@@ -17,7 +18,19 @@ class ImportImageUserFormType extends AbstractType
                     'attr' =>['class'=> 'form-control'],
                     'help' => 'Séléctioner une image',
                     'label' => false,
-                    'required' => true,]);
+                    'required' => true,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '1024k',
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/gif',
+                            'image/png',
+                        ],
+                        'mimeTypesMessage' => 'Please upload a valid image (jpeg/gif/png)',
+                    ])
+                ],
+                ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
