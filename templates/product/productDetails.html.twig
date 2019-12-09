@@ -14,7 +14,7 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mt-50">
                             <li class="breadcrumb-item"><a href="{{ path('index') }}">Acceuil</a></li>
-                            <li class="breadcrumb-item"><a href="#">{{ product.getCategory() }}</a></li>
+                            <li class="breadcrumb-item"><a href="{{ path('shopcategory', {category: product.category}) }}">{{ product.getCategory()}}</a></li>
                             <li class="breadcrumb-item active" aria-current="page">{{ product.getName() }}</li>
                         </ol>
                     </nav>
