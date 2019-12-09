@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\UserLogin;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -32,7 +33,7 @@ class UserLoginFormType extends AbstractType
                 'attr'=> ['class'=> 'form-control',"placeholder"=>"Nom"],
                 'label' => false,
                 'required' => true,])
-            ->add('email', TextType::class,[
+            ->add('email', EmailType::class,[
                 'attr'=> ['class'=> 'form-control',"placeholder"=>"Email"],
                 'label' => false,
                 'required' => true,])
