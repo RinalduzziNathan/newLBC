@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\UserLogin;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -30,7 +31,7 @@ class UpdateUserFormType extends AbstractType
                 'attr'=> ['class'=> 'form-control',"placeholder"=>$options['lastname']],
                 'label' => false,
                 'required' => true,])
-            ->add('email', TextType::class,[
+            ->add('email', EmailType::class,[
                 'attr'=> ['class'=> 'form-control',"placeholder"=>$options['email']],
                 'label' => false,
                 'required' => true,])

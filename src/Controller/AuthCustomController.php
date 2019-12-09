@@ -40,7 +40,12 @@ class AuthCustomController extends AbstractController
         $lastUsername = $authenticationUtils->getLastUsername();
 
 
-
+        $formMail = $this->createForm(SendMailFormType::class);
+        $formMail->handleRequest($request);
+        if ($formMail->isSubmitted() && $formMail->isValid()) {
+            $email = $formMail->getData()['email'];
+            return $this->redirectToRoute('sendmail', ["email" => $email]);
+        }
         $formMail = $this->createForm(SendMailFormType::class);
         $formMail->handleRequest($request);
 
