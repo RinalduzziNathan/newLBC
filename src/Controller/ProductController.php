@@ -198,6 +198,7 @@ class ProductController extends AbstractController
 
                     $image = new ProductImage();
                     $File = $requestFile->get('filename')->getData();
+
                     $originalFilename = pathinfo($File->getClientOriginalName(), PATHINFO_FILENAME);
                     // this is needed to safely include the file name as part of the URL
                     $safeFilename = preg_replace('/[^A-Za-z0-9]/', "", $originalFilename);
